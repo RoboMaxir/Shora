@@ -5,7 +5,7 @@ const fa2 = n => String(n).padStart(2, '0').replace(/\d/g, d => '۰۱۲۳۴۵۶�
 const G = window.gsap || null;
 
 /* ═══ اعضا ═══ */
-const AG = { finance: { ac: '#5ab0ff' }, strategy: { ac: '#f3c95c' }, hr: { ac: '#b18cff' }, ops: { ac: '#35e0c8' }, legal: { ac: '#9db4d2' } };
+const AG = { finance: { ac: '#2563eb' }, strategy: { ac: '#d97706' }, hr: { ac: '#7c3aed' }, ops: { ac: '#0891b2' }, legal: { ac: '#64748b' } };
 const NAMES = { finance: 'مالی', strategy: 'استراتژی', hr: 'منابع انسانی', ops: 'عملیات', legal: 'حقوقی' };
 const EN = { finance: 'FINANCE', strategy: 'STRATEGY', hr: 'HR', ops: 'OPERATIONS', legal: 'LEGAL' };
 const ORDER = ['finance', 'strategy', 'hr', 'ops', 'legal'];
@@ -36,8 +36,7 @@ const DEMO = {
         args: [{ angle: 'تقاضای انباشته', claim: '۳۱٪ سفارشات معوق قابل جذب است', because: 'رفع گلوگاه، تقاضای موجود را بالفعل می‌کند', evidence: ['گزارش سفارشات'] },
         { angle: 'مزیت رقابتی', claim: 'کاهش زمان تحویل به زیر رقبا', because: 'ظرفیت جدید تعهد تحویل ۱۰ روزه ممکن می‌سازد', evidence: ['بنچمارک بازار'] },
         { angle: 'پورتفوی محصول', claim: 'امکان تولید قطعات دقیق‌تر با حاشیه بالاتر', because: 'دستگاه جدید تلرانس پایین‌تری دارد', evidence: ['نقشه راه محصول'] }],
-        risks: ['کندشدن بازار در ۹۰ روز آینده'],
-        conds: ['هم‌زمانی خرید با کمپین فروش'],
+        risks: ['کندشدن بازار در ۹۰ روز آینده'], conds: ['هم‌زمانی خرید با کمپین فروش'],
         deep: 'تحلیل عمیق ۱۰×: سناریوی عدم‌خرید هم مدل‌سازی شد.'
     },
     hr: {
@@ -45,8 +44,7 @@ const DEMO = {
         args: [{ angle: 'فشار کاری', claim: 'اضافه‌کاری ۱۸٪ فعلی به زیر ۸٪ می‌رسد', because: 'رفع گلوگاه، فشار زمانی شیفت‌ها را باز می‌کند', evidence: ['کارکرد ۶ ماه اخیر'] },
         { angle: 'مهارت', claim: 'نیاز به آموزش ۴ اپراتور', because: 'فناوری جدید مهارت برنامه‌نویسی CNC می‌خواهد', evidence: ['ماتریس مهارت'] },
         { angle: 'ریسک خروج', claim: 'کاهش ریزش نیروی باتجربه', because: 'فشار کمتر، فرسودگی شغلی را کم می‌کند', evidence: ['مصاحبه خروج'] }],
-        risks: ['مقاومت در برابر تغییر فناوری'],
-        conds: ['تدوین برنامه آموزش قبل از نصب'],
+        risks: ['مقاومت در برابر تغییر فناوری'], conds: ['تدوین برنامه آموزش قبل از نصب'],
         deep: 'تحلیل عمیق ۱۰×: ریسک مهارت با مدل جانشین‌پروری سنجیده شد.'
     },
     ops: {
@@ -54,8 +52,7 @@ const DEMO = {
         args: [{ angle: 'ظرفیت', claim: 'بهره‌برداری از ۹۴٪ به ۷۸٪ متعادل می‌شود', because: 'ظرفیت جدید، بار را از دستگاه اشباع خارج می‌کند', evidence: ['داشبورد OEE'] },
         { angle: 'توقف‌ها', claim: 'حذف ۲۷ ساعت توقف در ۹۰ روز', because: 'سربار تعمیرات ماشین فرسوده حذف می‌شود', evidence: ['لاگ نت'] },
         { angle: 'کیفیت', claim: 'کاهش ضایعات تا ۲٫۵ واحد درصد', because: 'دقت بالاتر ماشین جدید', evidence: ['گزارش ضایعات'] }],
-        risks: ['اختلال در حین جابه‌جایی و نصب'],
-        conds: ['نصب در پنجره کم‌بار تولید'],
+        risks: ['اختلال در حین جابه‌جایی و نصب'], conds: ['نصب در پنجره کم‌بار تولید'],
         deep: 'تحلیل عمیق ۱۰×: شبیه‌سازی صف، گلوگاه ثانویه نشان نداد.'
     },
     legal: {
@@ -70,15 +67,13 @@ const DEMO = {
 };
 const DEMO_SYNTH = { rec: 'خرید دستگاه با شرط تأمین مالی مناسب و بازبینی حقوقی قرارداد؛ اولویت اجرا: پنجره کم‌بار تولید.' };
 
-/* مولد موضوع دلخواه */
 function hash(s) { let x = 7; for (const c of s) x = (x * 31 + c.charCodeAt(0)) % 9973; return x; }
 function genAnalyses(topic) {
     const T = topic.length > 46 ? topic.slice(0, 46) + '…' : topic, h = hash(topic);
     const pick = (a, i) => a[(h + i) % a.length];
     const st = {
         finance: pick(['conditional', 'positive', 'risk'], 0), strategy: pick(['positive', 'conditional'], 1),
-        hr: pick(['positive', 'conditional', 'risk'], 2), ops: pick(['positive', 'positive', 'conditional'], 3),
-        legal: pick(['risk', 'conditional'], 4)
+        hr: pick(['positive', 'conditional', 'risk'], 2), ops: pick(['positive', 'positive', 'conditional'], 3), legal: pick(['risk', 'conditional'], 4)
     };
     const mk = (k, headline, args, risks, conds) => ({
         stance: st[k], conf: .62 + ((h + ORDER.indexOf(k) * 7) % 28) / 100, headline, args, risks, conds,
@@ -87,24 +82,19 @@ function genAnalyses(topic) {
     return {
         finance: mk('finance', `از بُعد مالی «${T}» نیازمند کنترل نقدینگی است`,
             [{ angle: 'جریان نقدینگی', claim: 'فشار نقدینگی در فاز اول', because: 'هزینه‌ها زودتر از درآمد اثر می‌گذارند', evidence: ['صورت جریان نقدی'] },
-            { angle: 'بازگشت سرمایه', claim: 'دوره بازگشت قابل قبول', because: 'بهره‌وری تدریجی جریان ورودی ایجاد می‌کند', evidence: ['طرح توجیهی'] }],
-            ['نوسان هزینه‌ها'], ['تعریف سقف بودجه و نقطه توقف']),
+            { angle: 'بازگشت سرمایه', claim: 'دوره بازگشت قابل قبول', because: 'بهره‌وری تدریجی جریان ورودی ایجاد می‌کند', evidence: ['طرح توجیهی'] }], ['نوسان هزینه‌ها'], ['تعریف سقف بودجه و نقطه توقف']),
         strategy: mk('strategy', `از منظر استراتژیک «${T}» با اهداف رشد هم‌راستاست`,
             [{ angle: 'جایگاه بازار', claim: 'تقویت جایگاه در اجرای سریع', because: 'پنجره فرص محدود است', evidence: ['تحلیل رقبا'] },
-            { angle: 'هم‌راستایی', claim: 'هم‌سو با نقشه راه سال', because: 'اهداف کمّی مشترک دارد', evidence: ['OKR سازمان'] }],
-            ['پراکندگی تمرکز تیم‌ها'], ['تعریف شاخص موفقیت قبل از اجرا']),
+            { angle: 'هم‌راستایی', claim: 'هم‌سو با نقشه راه سال', because: 'اهداف کمّی مشترک دارد', evidence: ['OKR سازمان'] }], ['پراکندگی تمرکز تیم‌ها'], ['تعریف شاخص موفقیت قبل از اجرا']),
         hr: mk('hr', `از نظر منابع انسانی «${T}» نیازمند ظرفیت مهارتی است`,
             [{ angle: 'مهارت', claim: 'نیازمند توانمندسازی بخشی از تیم', because: 'اجرا به مهارت جدید وابسته است', evidence: ['ماتریس مهارت'] },
-            { angle: 'بار کاری', claim: 'توزیع بار باید بازطراحی شود', because: 'از فرسودگی تیم جلوگیری می‌کند', evidence: ['کارکرد اخیر'] }],
-            ['مقاومت در برابر تغییر'], ['برنامه آموزش قبل از اجرا']),
+            { angle: 'بار کاری', claim: 'توزیع بار باید بازطراحی شود', because: 'از فرسودگی تیم جلوگیری می‌کند', evidence: ['کارکرد اخیر'] }], ['مقاومت در برابر تغییر'], ['برنامه آموزش قبل از اجرا']),
         ops: mk('ops', `از زاویه عملیات «${T}» باید با ظرفیت واقعی سنجیده شود`,
             [{ angle: 'ظرفیت', claim: 'بالانس بار با ظرفیت فعلی', because: 'از گلوگاه جدید جلوگیری می‌کند', evidence: ['داشبورد عملیات'] },
-            { angle: 'فرایند', claim: 'به‌روزرسانی فرایندهای پشتیبان', because: 'اجرای پایدار بدون فرایند ممکن نیست', evidence: ['نقشه فرایندها'] }],
-            ['اختلال موقت در استقرار'], ['نصب تدریجی و پایلوت']),
+            { angle: 'فرایند', claim: 'به‌روزرسانی فرایندهای پشتیبان', because: 'اجرای پایدار بدون فرایند ممکن نیست', evidence: ['نقشه فرایندها'] }], ['اختلال موقت در استقرار'], ['نصب تدریجی و پایلوت']),
         legal: mk('legal', `از منظر حقوقی «${T}» نیازمند بازبینی تعهدات است`,
             [{ angle: 'قراردادها', claim: 'بازبینی تعهدات مرتبط', because: 'ریسک تعارض یا جریمه وجود دارد', evidence: ['آرشیو قراردادها'] },
-            { angle: 'انطباق', claim: 'الزامات نظارتی شناسایی شد', because: 'عدم انطباق ریسک توقف ایجاد می‌کند', evidence: ['فهرست الزامات'] }],
-            ['ابهام در شروط طرف مقابل'], ['اخذ تأییدیه حقوقی قبل از اجرا'])
+            { angle: 'انطباق', claim: 'الزامات نظارتی شناسایی شد', because: 'عدم انطباق ریسک توقف ایجاد می‌کند', evidence: ['فهرست الزامات'] }], ['ابهام در شروط طرف مقابل'], ['اخذ تأییدیه حقوقی قبل از اجرا'])
     };
 }
 
@@ -115,8 +105,8 @@ const BASEDUR = { ops: 5200, finance: 7400, strategy: 9600, hr: 11800, legal: 13
 const speed = () => ({ 1: 1.5, 3: 1, 5: .72, 10: .5 })[mult] || 1;
 function clearTimers() { timers.forEach(clearTimeout); timers = []; }
 (function confLoop() {
-    conf += (confTarget - conf) * .05;
-    $('#confFill').style.width = conf + '%'; $('#confPct').textContent = fa(Math.round(conf)) + '٪';
+    conf += (confTarget - conf) * .05; const t = fa(Math.round(conf)) + '٪';
+    $('#sbConf').textContent = t; if (state.finished) $('#resultConf').innerHTML = 'اطمینان <b>' + t + '</b>';
     requestAnimationFrame(confLoop);
 })();
 
@@ -124,12 +114,12 @@ function startSession(topic, analyses, synth) {
     clearTimers();
     state = { phase: 'analyzing', topic, analyses, synth, results: {}, finished: false };
     $('#topicTxt').textContent = topic; secs = 0; conf = 0; confTarget = 0;
-    $('#eChips').innerHTML = ORDER.map(k => `<span class="ech pend" id="ech-${k}">${NAMES[k]}</span>`).join('');
-    $('#eSum').textContent = 'در حال تحلیل موازی موضوع توسط ۵ عضو شورا…';
-    $('#eProg').textContent = '۰ از ۵'; $('#eNote').classList.remove('show');
+    $('#sbCount').textContent = '۰ از ۵'; $('#sbFill').style.width = '0%'; $('#sbConf').textContent = '۰٪';
+    $('#statusBar').classList.remove('done');
+    $('#resultCard').classList.remove('show'); $('#resultTxt').textContent = '';
+    $('#ceoBubble').classList.remove('show');
     ORDER.forEach(k => {
-        const m = AG[k]; m.el.className = 'member thinking'; m.badge.innerHTML = '';
-        m.op.textContent = 'در حال تحلیل…';
+        const m = AG[k]; m.el.className = 'member thinking'; m.badge.innerHTML = ''; m.op.textContent = 'در حال تحلیل…';
         const sr = $('#sr-' + k); sr.className = 'srow'; sr.querySelector('.sv').textContent = 'در حال تحلیل…';
     });
     [...$('#pmini').children].forEach(s => s.classList.remove('on')); $('#stProgN').textContent = '۰/۵';
@@ -144,28 +134,27 @@ function completeAgent(k) {
     m.el.className = 'member done st-' + r.stance;
     m.badge.innerHTML = `${STANCES[r.stance].icon} ${STANCES[r.stance].fa}`;
     m.op.textContent = r.headline;
-    if (G) G.from(m.el, { y: 8, opacity: .5, duration: .35, ease: 'power2.out' });
-    const ch = $('#ech-' + k); ch.className = 'ech fill st-' + r.stance;
-    ch.innerHTML = `${STANCES[r.stance].icon} ${NAMES[k]}`;
-    const sr = $('#sr-' + k); sr.className = 'srow st-' + r.stance;
-    sr.querySelector('.sv').textContent = 'موضع: ' + STANCES[r.stance].fa;
+    if (G) G.from(m.el, { y: 8, opacity: .4, duration: .35, ease: 'power2.out' });
+    const sr = $('#sr-' + k); sr.className = 'srow st-' + r.stance; sr.querySelector('.sv').textContent = 'موضع: ' + STANCES[r.stance].fa;
     const done = Object.keys(state.results).length;
-    $('#eProg').textContent = fa(done) + ' از ۵';
+    $('#sbCount').textContent = fa(done) + ' از ۵';
+    $('#sbFill').style.width = (done / 5 * 100) + '%';
     [...$('#pmini').children].forEach((s, i) => s.classList.toggle('on', i < done));
     $('#stProgN').textContent = fa(done) + '/۵';
     confTarget = Object.values(state.results).reduce((a, x) => a + x.conf, 0) / done * 100;
-    $('#eSum').innerHTML = `تاکنون <b>${fa(done)}</b> تحلیل دریافت شد؛ در انتظار تکمیل ارزیابی…`;
-    if (done === 5) timers.push(setTimeout(synthesize, 800));
+    if (done === 5) timers.push(setTimeout(synthesize, 750));
 }
 
 function synthesize() {
     if (state.phase !== 'analyzing') return;
     state.phase = 'done'; state.finished = true;
     const s = state.synth || genSynth();
-    $('#eSum').innerHTML = `<b>جمع‌بندی شورا:</b> ${s.rec}`;
+    $('#resultTxt').textContent = s.rec;
+    $('#resultCard').classList.add('show');
+    $('#statusBar').classList.add('done'); $('#sbCount').textContent = '۵ از ۵ · تکمیل شد';
     confTarget = Math.round(Object.values(state.results).reduce((a, x) => a + x.conf, 0) / 5 * 100);
     toast('ارزیابی کامل شد — برای جزئیات روی هر عضو کلیک کنید');
-    if (G) G.from('#evalPanel', { scale: .985, opacity: .7, duration: .4, ease: 'power2.out' });
+    if (G) G.from('#resultCard', { y: 10, opacity: 0, duration: .45, ease: 'power2.out' });
 }
 function genSynth() {
     const cnt = { positive: 0, negative: 0, conditional: 0, risk: 0 };
@@ -184,8 +173,7 @@ function openAgent(k) {
    <div class="ab-head" style="--ac:${AG[k].ac}"><div class="aic">${icon}</div>
     <div><h4>${NAMES[k]} · ${EN[k]}</h4></div>
     <span class="conf">Confidence ${fa(Math.round(r.conf * 100))}%</span></div>
-   <div class="ab-hl st-${r.stance}">
-     <span class="badge">${STANCES[r.stance].icon} موضع: ${STANCES[r.stance].fa}</span><br>${r.headline}</div>
+   <div class="ab-hl st-${r.stance}"><span class="badge">${STANCES[r.stance].icon} موضع: ${STANCES[r.stance].fa}</span><br>${r.headline}</div>
    <div class="ab-sec">استدلال‌های چندجهته</div>
    ${shownArgs(r).map(a => `<div class="arg"><div class="ah"><span class="angle">${a.angle}</span><span class="claim">${a.claim}</span></div>
      <div class="bec"><b>چرا؟</b> ${a.because}</div>
@@ -194,7 +182,7 @@ function openAgent(k) {
    <div class="ab-sec">شروط اجرا</div>${r.conds.map(x => `<div class="condc">${x}</div>`).join('')}
    ${mult === 10 && r.deep ? `<div class="deep">◈ ${r.deep}</div>` : ''}`;
     $('#ovAgent').classList.add('open');
-    if (G) G.from('#ovAgent .modal', { scale: .94, y: 14, opacity: 0, duration: .3, ease: 'power3.out' });
+    if (G) G.from('#ovAgent .modal', { scale: .95, y: 12, opacity: 0, duration: .3, ease: 'power3.out' });
 }
 $('#agentClose').onclick = () => $('#ovAgent').classList.remove('open');
 
@@ -204,8 +192,7 @@ $('#topicBtn2').onclick = () => { closeAll(); openTopic(); };
 $('#topicNo').onclick = () => $('#ovTopic').classList.remove('open');
 $('#topicGo').onclick = () => {
     const v = $('#topicInput').value.trim(); if (!v) return;
-    $('#ovTopic').classList.remove('open'); $('#topicInput').value = '';
-    startSession(v, genAnalyses(v), null);
+    $('#ovTopic').classList.remove('open'); $('#topicInput').value = ''; startSession(v, genAnalyses(v), null);
 };
 $('#topicInput').addEventListener('keydown', e => { if (e.key === 'Enter') $('#topicGo').click(); });
 
@@ -220,12 +207,10 @@ function send() {
     const inp = $('#ceoInput'), v = inp.value.trim(); if (!v) return; inp.value = '';
     const b = $('#ceoBubble'); $('#ceoTxt').textContent = v; b.classList.add('show');
     clearTimeout(b.ht); b.ht = setTimeout(() => b.classList.remove('show'), 6000);
-    if (state.phase === 'analyzing') { toast('شورا در حال تحلیل است؛ نظر شما پس از جمع‌بندی لحاظ می‌شود'); $('#eNote').classList.add('show'); return; }
+    if (state.phase === 'analyzing') { toast('شورا در حال تحلیل است؛ نظر شما پس از جمع‌بندی لحاظ می‌شود'); return; }
     if (state.phase === 'done') {
-        const k = ORDER[(ri++) % 5], m = AG[k];
-        m.op.textContent = REPLY[k];
+        const k = ORDER[(ri++) % 5], m = AG[k]; m.op.textContent = REPLY[k];
         setTimeout(() => { m.op.textContent = state.results[k].headline; }, 4200);
-        $('#eNote').classList.add('show');
     }
 }
 $('#sendBtn').onclick = send;
@@ -245,28 +230,21 @@ $('#plusBtn').onclick = e => { e.stopPropagation(); $('#plusW').classList.toggle
 document.addEventListener('click', e => { if (!e.target.closest('.plusW')) $('#plusW').classList.remove('open'); });
 function addChip(n) {
     const c = document.createElement('span'); c.className = 'chip';
-    c.innerHTML = `<svg viewBox="0 0 24 24"><path d="M7 3h8l4 4v14H7z"/></svg><b>${n}</b><button>✕</button>`;
-    $('#chips').appendChild(c);
+    c.innerHTML = `<svg viewBox="0 0 24 24"><path d="M7 3h8l4 4v14H7z"/></svg><b>${n}</b><button>✕</button>`; $('#chips').appendChild(c);
 }
 $('#chips').addEventListener('click', e => { if (e.target.tagName === 'BUTTON') e.target.closest('.chip').remove(); });
 function shared() { toast('با اعضای شورا به اشتراک گذاشته شد'); }
 $('#plusMenu').addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
-    $('#plusW').classList.remove('open');
-    const a = b.dataset.act;
-    if (a === 'topic') openTopic();
-    else if (a === 'file') $('#fileInput').click();
-    else if (a === 'img') $('#imgInput').click();
-    else if (a === 'ref') { addChip('گزارش فروش فصلی'); shared(); }
+    $('#plusW').classList.remove('open'); const a = b.dataset.act;
+    if (a === 'topic') openTopic(); else if (a === 'file') $('#fileInput').click();
+    else if (a === 'img') $('#imgInput').click(); else if (a === 'ref') { addChip('گزارش فروش فصلی'); shared(); }
 });
 $('#fileInput').onchange = e => { if (e.target.files[0]) { addChip(e.target.files[0].name); shared(); e.target.value = ''; } };
 $('#imgInput').onchange = e => { if (e.target.files[0]) { addChip(e.target.files[0].name); shared(); e.target.value = ''; } };
 
 /* ═══ کشوها / نوارها ═══ */
-function openDr(id) {
-    closeAll(); $('#' + id).classList.add('open'); $('#scrim').classList.add('show');
-    if (id === 'sideR') mkChart();
-}
+function openDr(id) { closeAll(); $('#' + id).classList.add('open'); $('#scrim').classList.add('show'); if (id === 'sideR') mkChart(); }
 function closeAll() { $$('.dr').forEach(d => d.classList.remove('open')); $('#scrim').classList.remove('show'); }
 $$('.eicon').forEach(b => b.addEventListener('click', () => {
     if (b.dataset.open) { openDr(b.dataset.open); return; }
@@ -278,6 +256,8 @@ $$('.eicon').forEach(b => b.addEventListener('click', () => {
 }));
 $$('.dr [data-close]').forEach(b => b.onclick = closeAll);
 $('#sumBtn2').onclick = () => { closeAll(); openMod('خلاصه ارزیابی', sumHTML()); };
+$('#sbDetails').onclick = () => openMod('خلاصه ارزیابی', sumHTML());
+$('#resultDetails').onclick = () => openMod('خلاصه ارزیابی', sumHTML());
 $('#dataBtn2').onclick = () => openDr('sideR');
 $('#histBtn').onclick = () => {
     closeAll(); openMod('تاریخچه جلسات', `
@@ -287,16 +267,17 @@ $('#histBtn').onclick = () => {
 };
 function sumHTML() {
     if (state.finished) {
-        const r = ORDER.map(k => `<li style="padding-right:16px;position:relative;font-size:12px;line-height:2;color:#cfe2f5">
-    <span style="position:absolute;right:0;top:10px;width:6px;height:6px;border-radius:2px;background:${AG[k].ac}"></span>
-    <b style="color:${AG[k].ac}">${NAMES[k]}:</b> ${STANCES[state.results[k].stance].fa} — ${state.results[k].headline}</li>`).join('');
-        return `<p class="muted">موضوع: <b style="color:#e8f2ff">${state.topic}</b></p><ul style="list-style:none">${r}</ul>`;
+        const r = ORDER.map(k => `<li style="position:relative;padding-right:16px;list-style:none;font-size:12.5px;line-height:2;color:var(--text2)">
+    <span style="position:absolute;right:0;top:11px;width:6px;height:6px;border-radius:2px;background:${AG[k].ac}"></span>
+    <b style="color:var(--text)">${NAMES[k]}:</b> ${STANCES[state.results[k].stance].fa} — ${state.results[k].headline}</li>`).join('');
+        return `<p class="muted">موضوع: <b style="color:var(--text)">${state.topic}</b></p><ul style="margin:8px 0">${r}</ul>
+    <div class="ab-hl st-positive" style="margin-top:10px"><b>جمع‌بندی:</b> ${$('#resultTxt').textContent}</div>`;
     }
     return `<p class="muted">ارزیابی هنوز کامل نشده است.</p>`;
 }
 function openMod(t, h) {
     $('#modTitle').textContent = t; $('#modBody').innerHTML = h; $('#ovMod').classList.add('open');
-    if (G) G.from('#ovMod .modal', { scale: .94, y: 14, opacity: 0, duration: .3, ease: 'power3.out' });
+    if (G) G.from('#ovMod .modal', { scale: .95, y: 12, opacity: 0, duration: .3, ease: 'power3.out' });
 }
 $('#modClose').onclick = () => $('#ovMod').classList.remove('open');
 $$('.overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); }));
@@ -305,46 +286,34 @@ $$('.overlay').forEach(o => o.addEventListener('click', e => { if (e.target === 
 $('#exitBtn').onclick = () => { closeAll(); $('#ovExit').classList.add('open'); };
 $('#exitNo').onclick = () => $('#ovExit').classList.remove('open');
 $('#exitYes').onclick = () => {
-    $('#ovExit').classList.remove('open'); clearTimers();
-    $('#exitScr').classList.add('show');
-    if (G) G.from('.exCard', { scale: .93, opacity: 0, duration: .4, ease: 'power3.out' });
+    $('#ovExit').classList.remove('open'); clearTimers(); $('#exitScr').classList.add('show');
+    if (G) G.from('.exCard', { scale: .94, opacity: 0, duration: .4, ease: 'power3.out' });
 };
 $('#backBtn').onclick = () => {
     $('#exitScr').classList.remove('show');
-    if (state.phase === 'analyzing') { startSession(state.topic, state.analyses, state.synth); toast('جلسه از سر گرفته شد'); }
-    else toast('به جلسه بازگشتید');
+    if (state.phase === 'analyzing') { startSession(state.topic, state.analyses, state.synth); toast('جلسه از سر گرفته شد'); } else toast('به جلسه بازگشتید');
 };
 $('#minBtn').onclick = () => openMod('صورت‌جلسه — نشست #۱۲', sumHTML());
-document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-        closeAll();
-        $$('.overlay').forEach(o => o.classList.remove('open')); $('#plusW').classList.remove('open');
-    }
-});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeAll(); $$('.overlay').forEach(o => o.classList.remove('open')); $('#plusW').classList.remove('open'); } });
 
 setInterval(() => { secs++; $('#sessTimer').textContent = fa2(Math.floor(secs / 60)) + ':' + fa2(secs % 60); }, 1000);
 
 let mChart = null;
 function mkChart() {
     if (mChart || !window.Chart) return;
-    Chart.defaults.font.family = "'Vazirmatn','Space Grotesk',sans-serif";
-    Chart.defaults.color = '#8fa6c0'; Chart.defaults.borderColor = 'rgba(122,196,255,.08)'; Chart.defaults.font.size = 9;
+    Chart.defaults.font.family = "'Inter','Vazirmatn',sans-serif"; Chart.defaults.color = '#6e6e80';
+    Chart.defaults.borderColor = 'rgba(0,0,0,.06)'; Chart.defaults.font.size = 9;
     const el = $('#mChart'), ctx = el.getContext('2d');
-    const g = ctx.createLinearGradient(0, 0, 0, 110);
-    g.addColorStop(0, 'rgba(90,176,255,.32)'); g.addColorStop(1, 'rgba(90,176,255,0)');
+    const g = ctx.createLinearGradient(0, 0, 0, 110); g.addColorStop(0, 'rgba(37,99,235,.18)'); g.addColorStop(1, 'rgba(37,99,235,0)');
     mChart = new Chart(el, {
-        type: 'line',
-        data: {
+        type: 'line', data: {
             labels: ['فرو', 'ارد', 'خرد', 'تیر', 'مرد', 'شهر'],
-            datasets: [{
-                data: [22.4, 21.8, 21.1, 20.2, 19.1, 18.2], borderColor: '#5ab0ff', backgroundColor: g,
-                fill: true, tension: .42, borderWidth: 2, pointRadius: 0
-            }]
+            datasets: [{ data: [22.4, 21.8, 21.1, 20.2, 19.1, 18.2], borderColor: '#2563eb', backgroundColor: g, fill: true, tension: .4, borderWidth: 2, pointRadius: 0 }]
         },
         options: {
             responsive: true, maintainAspectRatio: false,
             plugins: { legend: { display: false }, tooltip: { rtl: true, displayColors: false } },
-            scales: { y: { grid: { color: 'rgba(122,196,255,.06)' } }, x: { grid: { display: false } } }
+            scales: { y: { grid: { color: 'rgba(0,0,0,.05)' }, ticks: { color: '#a0a0ab' } }, x: { grid: { display: false }, ticks: { color: '#a0a0ab' } } }
         }
     });
 }
@@ -356,10 +325,10 @@ let toastT; function toast(t) {
 
 /* ═══ شروع ═══ */
 if (G) {
-    G.from('.hdr', { y: -24, opacity: 0, duration: .45 });
-    G.from('.member', { y: 12, opacity: 0, duration: .4, stagger: .07, ease: 'power2.out', delay: .12 });
-    G.from('.eval', { y: 12, opacity: 0, duration: .45, delay: .3 });
-    G.from('.ftr', { y: 24, opacity: 0, duration: .45, delay: .18 });
-    G.from('.ebar', { opacity: 0, scale: .7, duration: .35, stagger: .1, delay: .35 });
+    G.from('.hdr', { y: -20, opacity: 0, duration: .4 });
+    G.from('.statusbar', { y: -10, opacity: 0, duration: .4, delay: .05 });
+    G.from('.member', { y: 10, opacity: 0, duration: .38, stagger: .06, ease: 'power2.out', delay: .1 });
+    G.from('.ftr', { y: 20, opacity: 0, duration: .4, delay: .16 });
+    G.from('.ebar', { opacity: 0, scale: .8, duration: .35, stagger: .08, delay: .3 });
 }
-setTimeout(() => startSession(DEMO_TOPIC, DEMO, DEMO_SYNTH), G ? 1600 : 400);
+setTimeout(() => startSession(DEMO_TOPIC, DEMO, DEMO_SYNTH), G ? 1500 : 400);

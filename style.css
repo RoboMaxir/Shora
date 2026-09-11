@@ -1,20 +1,24 @@
 :root {
-    --line: rgba(122, 196, 255, .13);
-    --line2: rgba(130, 210, 255, .28);
-    --cyan: #41d8ff;
-    --blue: #5ab0ff;
-    --purple: #b18cff;
-    --gold: #f3c95c;
-    --green: #2fe6a0;
-    --red: #ff6b7a;
-    --steel: #9db4d2;
-    --teal: #35e0c8;
-    --text: #eaf4ff;
-    --muted: #8fa6c0;
-    --dim: #5c7590;
-    --fa: 'Vazirmatn', system-ui;
-    --en: 'Space Grotesk', var(--fa);
-    --card: rgba(14, 24, 44, .62);
+    --bg: #ffffff;
+    --bg2: #f9f9f9;
+    --bg3: #f4f4f4;
+    --hover: #ececec;
+    --panel: #ffffff;
+    --line: #e6e6e6;
+    --line2: #d6d6d6;
+    --text: #0d0d0d;
+    --text2: #3f3f46;
+    --muted: #6e6e80;
+    --dim: #a0a0ab;
+    --accent: #10a37f;
+    --accent-d: #0d8a6a;
+    --accent-bg: #eaf7f2;
+    --red: #dc2626;
+    --fa: 'Vazirmatn', system-ui, sans-serif;
+    --en: 'Inter', 'Vazirmatn', system-ui, sans-serif;
+    --sh-sm: 0 1px 2px rgba(0, 0, 0, .05);
+    --sh-md: 0 4px 14px rgba(0, 0, 0, .07);
+    --sh-lg: 0 12px 40px rgba(0, 0, 0, .12);
 }
 
 * {
@@ -30,21 +34,23 @@ body {
 
 body {
     display: grid;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: auto auto 1fr auto;
     height: 100svh;
     overflow: hidden;
-    background: radial-gradient(90% 70% at 50% 0%, #0a1424 0%, #050910 60%, #030509 100%);
+    background: var(--bg);
     color: var(--text);
-    font-family: var(--fa)
+    font-family: var(--fa);
+    -webkit-font-smoothing: antialiased
 }
 
 ::-webkit-scrollbar {
-    width: 6px
+    width: 8px
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(120, 190, 255, .18);
-    border-radius: 3px
+    background: #dcdcdc;
+    border-radius: 4px;
+    border: 2px solid #fff
 }
 
 button {
@@ -57,33 +63,18 @@ svg {
 }
 
 .dot {
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 8px var(--green);
-    animation: pulse 2s infinite;
+    background: var(--accent);
     flex-shrink: 0
-}
-
-@keyframes pulse {
-
-    0%,
-    100% {
-        opacity: .8
-    }
-
-    50% {
-        opacity: 1;
-        filter: brightness(1.3)
-    }
 }
 
 @keyframes blink {
 
     0%,
     100% {
-        opacity: .2;
+        opacity: .25;
         transform: translateY(0)
     }
 
@@ -97,28 +88,28 @@ svg {
 
     0%,
     100% {
-        opacity: .45
+        opacity: .5
     }
 
     50% {
-        opacity: 1
+        opacity: .9
     }
 }
 
 .st-positive {
-    --sc: #2fe6a0
+    --sc: #16a34a
 }
 
 .st-negative {
-    --sc: #ff6b7a
+    --sc: #dc2626
 }
 
 .st-conditional {
-    --sc: #f3c95c
+    --sc: #d97706
 }
 
 .st-risk {
-    --sc: #ff9f6b
+    --sc: #ea580c
 }
 
 /* ═══ هدر ═══ */
@@ -127,12 +118,11 @@ svg {
     align-items: center;
     justify-content: space-between;
     gap: 14px;
-    padding: 10px 56px;
+    padding: 11px 20px;
     border-bottom: 1px solid var(--line);
+    background: #fff;
     position: relative;
-    z-index: 20;
-    background: rgba(9, 16, 30, .8);
-    backdrop-filter: blur(16px)
+    z-index: 20
 }
 
 .ttl {
@@ -144,25 +134,26 @@ svg {
 .logo-em {
     width: 34px;
     height: 34px;
-    border-radius: 10px;
+    border-radius: 9px;
     display: grid;
     place-items: center;
     flex-shrink: 0;
-    background: rgba(90, 190, 255, .1);
-    border: 1px solid var(--line2)
+    background: var(--accent-bg);
+    border: 1px solid #d3ede4
 }
 
 .ttl small {
     display: block;
-    font-size: 9px;
+    font-size: 9.5px;
     color: var(--dim);
-    margin-bottom: 2px
+    margin-bottom: 1px
 }
 
 .ttl h2 {
-    font-size: 14px;
+    font-size: 14.5px;
     font-weight: 700;
-    color: #f0f7ff
+    color: var(--text);
+    letter-spacing: -.01em
 }
 
 .hmeta {
@@ -175,24 +166,103 @@ svg {
     display: inline-flex;
     gap: 6px;
     align-items: center;
-    font-size: 9.5px;
+    font-size: 10px;
     font-weight: 600;
     padding: 5px 11px;
     border-radius: 99px;
-    background: rgba(120, 190, 255, .07);
+    background: var(--bg3);
     border: 1px solid var(--line);
     color: var(--muted)
 }
 
 .hbadge.live {
-    color: #8df2c6;
-    border-color: rgba(47, 230, 160, .35)
+    color: var(--accent-d);
+    background: var(--accent-bg);
+    border-color: #d3ede4
+}
+
+.hbadge.live .dot {
+    animation: skp 2s infinite
 }
 
 .hbadge.timer {
     direction: ltr;
     font-family: var(--en);
-    color: #bfe6ff
+    color: var(--text2)
+}
+
+/* ═══ نوار وضعیت ═══ */
+.statusbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 20px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--line);
+    z-index: 19;
+    position: relative
+}
+
+.sb-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text2)
+}
+
+.sb-count {
+    font-size: 11px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums
+}
+
+.sb-bar {
+    flex: 1;
+    max-width: 240px;
+    height: 5px;
+    border-radius: 3px;
+    background: #e9e9e9;
+    overflow: hidden
+}
+
+.sb-bar i {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--accent);
+    border-radius: 3px;
+    transition: width .4s
+}
+
+.sb-conf {
+    font-size: 11px;
+    color: var(--muted);
+    margin-right: auto
+}
+
+.sb-conf b {
+    color: var(--text);
+    font-family: var(--en);
+    font-variant-numeric: tabular-nums
+}
+
+.sb-btn {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent-d);
+    background: #fff;
+    border: 1px solid var(--line2);
+    padding: 5px 13px;
+    border-radius: 8px;
+    transition: .18s
+}
+
+.sb-btn:hover {
+    background: var(--accent-bg);
+    border-color: #bfe6d9
+}
+
+.statusbar.done .sb-bar i {
+    background: var(--accent)
 }
 
 /* ═══ صحنه ═══ */
@@ -202,8 +272,8 @@ svg {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
-    background: radial-gradient(70% 60% at 50% 10%, rgba(30, 60, 110, .14), transparent 70%)
+    padding: 26px 20px;
+    background: var(--bg2)
 }
 
 .council {
@@ -211,73 +281,62 @@ svg {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: 880px
+    max-width: 960px;
+    gap: 20px
 }
 
-/* اعضا */
 .members {
     display: flex;
-    gap: 13px;
+    gap: 14px;
     justify-content: center;
     flex-wrap: wrap;
     width: 100%
 }
 
+/* اعضا */
 .member {
-    position: relative;
-    width: 156px;
+    width: 172px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 7px;
-    padding: 16px 13px 15px;
-    border-radius: 15px;
-    background: var(--card);
+    gap: 8px;
+    padding: 20px 15px 18px;
+    border-radius: 16px;
+    background: #fff;
     border: 1px solid var(--line);
-    backdrop-filter: blur(10px);
-    transition: .22s;
+    box-shadow: var(--sh-sm);
+    transition: .2s;
     text-align: center
 }
 
 .member:hover {
-    transform: translateY(-3px);
-    border-color: color-mix(in srgb, var(--ac) 45%, transparent);
-    box-shadow: 0 10px 26px rgba(0, 0, 0, .35)
+    transform: translateY(-4px);
+    box-shadow: var(--sh-md);
+    border-color: color-mix(in srgb, var(--ac) 45%, var(--line))
 }
 
-.member.done.st-positive {
-    border-color: rgba(47, 230, 160, .3)
-}
-
-.member.done.st-negative {
-    border-color: rgba(255, 107, 122, .3)
-}
-
-.member.done.st-conditional {
-    border-color: rgba(243, 201, 92, .3)
-}
-
-.member.done.st-risk {
-    border-color: rgba(255, 159, 107, .3)
+.member:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px
 }
 
 .m-av {
     position: relative;
-    width: 50px;
-    height: 50px;
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
     display: grid;
     place-items: center;
-    background: rgba(8, 16, 30, .7);
-    border: 1.5px solid color-mix(in srgb, var(--ac) 60%, transparent)
+    background: color-mix(in srgb, var(--ac) 11%, #fff);
+    border: 1.5px solid color-mix(in srgb, var(--ac) 32%, #fff)
 }
 
 .m-av svg {
-    width: 23px;
-    height: 23px;
+    width: 24px;
+    height: 24px;
     stroke: var(--ac);
     fill: none;
-    stroke-width: 1.7;
+    stroke-width: 1.8;
     stroke-linecap: round;
     stroke-linejoin: round
 }
@@ -285,13 +344,15 @@ svg {
 .m-think {
     position: absolute;
     bottom: -3px;
-    right: -4px;
+    left: 50%;
+    transform: translateX(-50%);
     display: none;
     gap: 3px;
-    padding: 3px 5px;
+    padding: 3px 6px;
     border-radius: 99px;
-    background: rgba(8, 16, 30, .95);
-    border: 1px solid var(--line)
+    background: #fff;
+    border: 1px solid var(--line);
+    box-shadow: var(--sh-sm)
 }
 
 .member.thinking .m-think {
@@ -315,15 +376,15 @@ svg {
 }
 
 .m-name {
-    font-size: 12.5px;
+    font-size: 13.5px;
     font-weight: 700;
-    color: #eaf4ff;
-    margin-top: 3px
+    color: var(--text);
+    margin-top: 2px
 }
 
 .m-en {
     font: 600 8px var(--en);
-    letter-spacing: .14em;
+    letter-spacing: .12em;
     color: var(--dim);
     direction: ltr
 }
@@ -332,12 +393,12 @@ svg {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    font: 700 9.5px var(--fa);
-    padding: 3px 9px;
+    font: 700 10px var(--fa);
+    padding: 3.5px 10px;
     border-radius: 99px;
-    color: var(--sc, #8fa6c0);
-    background: color-mix(in srgb, var(--sc, #8fa6c0) 13%, transparent);
-    border: 1px solid color-mix(in srgb, var(--sc, #8fa6c0) 42%, transparent)
+    color: var(--sc, #6e6e80);
+    background: color-mix(in srgb, var(--sc, #6e6e80) 11%, #fff);
+    border: 1px solid color-mix(in srgb, var(--sc, #6e6e80) 28%, #fff)
 }
 
 .m-badge {
@@ -349,10 +410,10 @@ svg {
 }
 
 .m-op {
-    font-size: 10px;
-    line-height: 1.7;
+    font-size: 11px;
+    line-height: 1.75;
     color: var(--muted);
-    min-height: 34px;
+    min-height: 38px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -360,154 +421,115 @@ svg {
 }
 
 .member.done .m-op {
-    color: #cfe2f5
+    color: var(--text2)
 }
 
 .member.thinking .m-op {
-    animation: skp 1.4s infinite
+    animation: skp 1.5s infinite
 }
 
-/* پنل ارزیابی */
-.eval {
-    width: min(540px, 94%);
-    margin-top: 22px;
-    padding: 15px 17px;
+/* کارت جمع‌بندی */
+.result {
+    display: none;
+    width: min(600px, 100%);
+    padding: 16px 18px;
     border-radius: 15px;
-    background: var(--card);
-    border: 1px solid var(--line);
-    backdrop-filter: blur(12px)
+    background: #fff;
+    border: 1px solid #d3ede4;
+    box-shadow: var(--sh-sm);
+    border-right: 3px solid var(--accent)
 }
 
-.e-head {
+.result.show {
+    display: block
+}
+
+.r-head {
     display: flex;
     align-items: center;
     gap: 8px;
     font-size: 12.5px;
     font-weight: 700;
-    color: #eaf4ff
+    color: var(--accent-d);
+    margin-bottom: 8px
 }
 
-.e-prog {
+.r-ic {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--accent)
+}
+
+.r-ic svg {
+    width: 12px;
+    height: 12px;
+    stroke: #fff;
+    fill: none;
+    stroke-width: 2.6;
+    stroke-linecap: round;
+    stroke-linejoin: round
+}
+
+.result p {
+    font-size: 13px;
+    line-height: 2;
+    color: var(--text2)
+}
+
+.r-foot {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line)
+}
+
+.r-conf {
+    font-size: 11px;
+    color: var(--muted)
+}
+
+.r-conf b {
+    font-family: var(--en)
+}
+
+.btn.sm {
     margin-right: auto;
-    font: 600 9.5px var(--fa);
-    color: var(--dim);
-    background: rgba(120, 190, 255, .08);
-    border: 1px solid var(--line);
-    padding: 3px 9px;
-    border-radius: 99px
-}
-
-.e-chips {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin: 11px 0
-}
-
-.ech {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font: 600 9.5px var(--fa);
-    padding: 4px 9px;
-    border-radius: 99px;
-    border: 1px solid var(--line);
-    color: var(--dim);
-    background: rgba(255, 255, 255, .02)
-}
-
-.ech.pend {
-    animation: skp 1.4s infinite
-}
-
-.ech.fill {
-    color: var(--sc);
-    background: color-mix(in srgb, var(--sc) 12%, transparent);
-    border-color: color-mix(in srgb, var(--sc) 40%, transparent)
-}
-
-.e-sum {
-    font-size: 11.5px;
-    line-height: 1.9;
-    color: var(--muted);
-    min-height: 32px
-}
-
-.e-sum b {
-    color: #eaf4ff
-}
-
-.e-conf {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    margin-top: 11px
-}
-
-.cbar {
-    flex: 1;
-    height: 5px;
-    border-radius: 3px;
-    background: rgba(255, 255, 255, .07);
-    overflow: hidden
-}
-
-.cbar i {
-    display: block;
-    height: 100%;
-    width: 0;
-    background: linear-gradient(90deg, var(--cyan), var(--green));
-    border-radius: 3px;
-    transition: width .3s
-}
-
-.cp {
-    font: 700 11px var(--en);
-    color: #a9e9ff
-}
-
-.e-note {
-    display: none;
-    font-size: 10px;
-    color: #8df2c6;
-    margin-top: 9px
-}
-
-.e-note.show {
-    display: block
+    padding: 7px 14px;
+    font-size: 11.5px
 }
 
 /* حباب مدیرعامل */
 .ceoB {
-    width: min(440px, 92%);
-    margin-top: 16px;
-    padding: 10px 14px;
+    display: none;
+    width: min(520px, 100%);
+    padding: 11px 15px;
     border-radius: 13px;
-    background: rgba(16, 32, 28, .7);
-    border: 1px solid rgba(47, 230, 160, .35);
-    opacity: 0;
-    transform: translateY(6px);
-    transition: .3s;
-    pointer-events: none
+    background: #fff;
+    border: 1px solid var(--line);
+    box-shadow: var(--sh-sm)
 }
 
 .ceoB.show {
-    opacity: 1;
-    transform: none
+    display: block
 }
 
 .cb-name {
     font-size: 10px;
     font-weight: 700;
-    color: var(--green);
+    color: var(--accent);
     display: block;
     margin-bottom: 3px
 }
 
 .ceoB p {
-    font-size: 12px;
+    font-size: 12.5px;
     line-height: 1.8;
-    color: #e8fbf1
+    color: var(--text2)
 }
 
 /* ═══ نوارها / کشوها ═══ */
@@ -518,12 +540,12 @@ svg {
     z-index: 30;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding: 8px 6px;
+    gap: 6px;
+    padding: 6px;
     border-radius: 99px;
-    background: rgba(9, 16, 30, .74);
+    background: #fff;
     border: 1px solid var(--line);
-    backdrop-filter: blur(14px)
+    box-shadow: var(--sh-md)
 }
 
 .ebar.left {
@@ -540,15 +562,15 @@ svg {
     border-radius: 50%;
     display: grid;
     place-items: center;
-    border: 1px solid transparent;
-    background: rgba(120, 190, 255, .06);
+    border: none;
+    background: transparent;
     color: var(--muted);
-    transition: .22s
+    transition: .18s
 }
 
 .eicon svg {
-    width: 16px;
-    height: 16px;
+    width: 17px;
+    height: 17px;
     stroke: currentColor;
     fill: none;
     stroke-width: 1.8;
@@ -557,13 +579,13 @@ svg {
 }
 
 .eicon:hover {
-    color: #eaf5ff;
-    background: rgba(120, 190, 255, .15)
+    color: var(--text);
+    background: var(--hover)
 }
 
 .eicon.on {
-    color: #04231a;
-    background: linear-gradient(135deg, var(--cyan), var(--blue))
+    color: #fff;
+    background: var(--accent)
 }
 
 .dr {
@@ -574,22 +596,21 @@ svg {
     z-index: 55;
     display: flex;
     flex-direction: column;
-    background: linear-gradient(180deg, rgba(11, 20, 38, .98), rgba(6, 11, 22, .99));
-    backdrop-filter: blur(18px);
-    transition: transform .4s cubic-bezier(.2, .85, .25, 1);
-    box-shadow: 0 0 60px rgba(0, 0, 0, .5)
+    background: #fff;
+    transition: transform .38s cubic-bezier(.2, .85, .25, 1);
+    box-shadow: var(--sh-lg)
 }
 
 .dr.l {
     left: 0;
     transform: translateX(-105%);
-    border-right: 1px solid var(--line2)
+    border-right: 1px solid var(--line)
 }
 
 .dr.r {
     right: 0;
     transform: translateX(105%);
-    border-left: 1px solid var(--line2)
+    border-left: 1px solid var(--line)
 }
 
 .dr.open {
@@ -600,25 +621,25 @@ svg {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 15px 18px;
+    padding: 16px 18px;
     border-bottom: 1px solid var(--line);
-    font-size: 13px;
+    font-size: 13.5px;
     font-weight: 700
 }
 
 .x {
     width: 29px;
     height: 29px;
-    border-radius: 9px;
+    border-radius: 8px;
     border: 1px solid var(--line);
-    background: transparent;
+    background: #fff;
     color: var(--muted);
     font-size: 13px
 }
 
 .x:hover {
-    color: #fff;
-    border-color: var(--line2)
+    background: var(--hover);
+    color: var(--text)
 }
 
 .navItem {
@@ -626,15 +647,15 @@ svg {
     align-items: center;
     gap: 11px;
     width: calc(100% - 24px);
-    margin: 4px 12px;
+    margin: 3px 12px;
     padding: 11px 12px;
-    border-radius: 11px;
+    border-radius: 10px;
     border: 1px solid transparent;
     background: transparent;
-    color: var(--muted);
+    color: var(--text2);
     font: 500 12.5px var(--fa);
     text-align: right;
-    transition: .2s
+    transition: .16s
 }
 
 .navItem svg {
@@ -649,8 +670,7 @@ svg {
 }
 
 .navItem:hover {
-    color: #eaf5ff;
-    background: rgba(120, 190, 255, .07)
+    background: var(--bg3)
 }
 
 .navItem small {
@@ -660,31 +680,30 @@ svg {
 }
 
 .navItem.exit {
-    color: #ffb3ba;
-    border: 1px solid rgba(255, 107, 122, .25);
-    background: rgba(255, 107, 122, .07);
-    margin-top: 12px
+    color: #c0392b;
+    background: #fef2f2;
+    margin-top: 12px;
+    border-color: #fde2e2
 }
 
 .navItem.exit:hover {
-    background: rgba(255, 107, 122, .15)
+    background: #fdecec
 }
 
 .navItem.exit small {
-    color: rgba(255, 179, 186, .55)
+    color: #e0907f
 }
 
 .dsep {
     height: 1px;
     background: var(--line);
-    margin: 12px 18px
+    margin: 11px 18px
 }
 
 .scrim {
     position: fixed;
     inset: 0;
-    background: rgba(2, 5, 11, .5);
-    backdrop-filter: blur(3px);
+    background: rgba(0, 0, 0, .35);
     z-index: 50;
     opacity: 0;
     pointer-events: none;
@@ -697,19 +716,19 @@ svg {
 }
 
 .sec {
-    padding: 13px 18px;
-    border-bottom: 1px solid rgba(122, 196, 255, .07)
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--line)
 }
 
 .sec .st {
-    font-size: 10px;
+    font-size: 10.5px;
     color: var(--dim);
-    margin-bottom: 10px;
+    margin-bottom: 11px;
     font-weight: 700
 }
 
 .sec .st b {
-    color: #bfe6ff
+    color: var(--text)
 }
 
 .srow {
@@ -721,18 +740,18 @@ svg {
 }
 
 .srow i {
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
-    background: var(--c, #2fe6a0);
+    background: var(--c, #10a37f);
     flex-shrink: 0
 }
 
 .srow .nm {
     font: 600 10px var(--en);
-    letter-spacing: .06em;
+    letter-spacing: .05em;
     direction: ltr;
-    color: #dcecff
+    color: var(--text2)
 }
 
 .srow .sv {
@@ -742,19 +761,19 @@ svg {
 }
 
 .srow.st-positive .sv {
-    color: #2fe6a0
+    color: #16a34a
 }
 
 .srow.st-negative .sv {
-    color: #ff6b7a
+    color: #dc2626
 }
 
 .srow.st-conditional .sv {
-    color: #f3c95c
+    color: #d97706
 }
 
 .srow.st-risk .sv {
-    color: #ff9f6b
+    color: #ea580c
 }
 
 .pmini {
@@ -766,12 +785,12 @@ svg {
     flex: 1;
     height: 4px;
     border-radius: 3px;
-    background: rgba(255, 255, 255, .08);
+    background: #e9e9e9;
     transition: .4s
 }
 
 .pmini i.on {
-    background: linear-gradient(90deg, var(--cyan), var(--green))
+    background: var(--accent)
 }
 
 .chartbox {
@@ -785,10 +804,9 @@ svg {
     display: flex;
     align-items: center;
     gap: 11px;
-    padding: 11px 56px;
+    padding: 11px 20px;
     border-top: 1px solid var(--line);
-    background: rgba(9, 16, 30, .85);
-    backdrop-filter: blur(16px);
+    background: #fff;
     position: relative;
     z-index: 20
 }
@@ -798,16 +816,17 @@ svg {
     display: flex;
     align-items: center;
     gap: 8px;
-    min-height: 44px;
-    padding: 5px 7px 5px 6px;
-    border-radius: 13px;
-    background: rgba(10, 20, 38, .72);
+    min-height: 46px;
+    padding: 6px 8px 6px 6px;
+    border-radius: 14px;
+    background: #fff;
     border: 1px solid var(--line2);
-    transition: .25s
+    transition: .2s
 }
 
 .ibox:focus-within {
-    border-color: rgba(120, 220, 255, .5)
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-bg)
 }
 
 .chips {
@@ -820,10 +839,10 @@ svg {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-size: 10px;
-    color: #bfe6ff;
-    background: rgba(90, 176, 255, .1);
-    border: 1px solid rgba(90, 176, 255, .3);
+    font-size: 10.5px;
+    color: var(--text2);
+    background: var(--bg3);
+    border: 1px solid var(--line);
     border-radius: 99px;
     padding: 4px 9px;
     direction: ltr;
@@ -833,7 +852,7 @@ svg {
 .chip svg {
     width: 11px;
     height: 11px;
-    stroke: currentColor;
+    stroke: var(--muted);
     fill: none;
     stroke-width: 1.8;
     flex-shrink: 0
@@ -855,7 +874,7 @@ svg {
 }
 
 .chip button:hover {
-    color: #fff
+    color: var(--red)
 }
 
 #ceoInput {
@@ -865,7 +884,7 @@ svg {
     border: none;
     outline: none;
     color: var(--text);
-    font: 400 13px var(--fa);
+    font: 400 13.5px var(--fa);
     padding: 7px 5px
 }
 
@@ -881,24 +900,23 @@ svg {
     border: none;
     display: grid;
     place-items: center;
-    background: linear-gradient(135deg, var(--green), var(--cyan));
-    color: #04231a;
-    transition: .2s
+    background: var(--accent);
+    color: #fff;
+    transition: .18s
 }
 
 #sendBtn svg {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     stroke: currentColor;
     fill: none;
     stroke-width: 2;
     stroke-linecap: round;
-    stroke-linejoin: round;
-    transform: scaleX(-1)
+    stroke-linejoin: round
 }
 
 #sendBtn:hover {
-    filter: brightness(1.1)
+    background: var(--accent-d)
 }
 
 .think {
@@ -907,12 +925,12 @@ svg {
     gap: 3px;
     padding: 4px;
     border-radius: 12px;
-    background: rgba(10, 20, 38, .72);
+    background: var(--bg3);
     border: 1px solid var(--line)
 }
 
 .think .tl {
-    font-size: 9px;
+    font-size: 9.5px;
     color: var(--dim);
     padding: 0 7px;
     white-space: nowrap
@@ -922,31 +940,30 @@ svg {
     font: 600 9.5px var(--en);
     color: var(--muted);
     background: transparent;
-    border: 1px solid transparent;
+    border: none;
     border-radius: 8px;
     padding: 7px 10px;
-    transition: .2s;
+    transition: .16s;
     direction: ltr;
     white-space: nowrap
 }
 
 .tbtn b {
     font-weight: 700;
-    opacity: .75
+    opacity: .7
 }
 
 .tbtn:hover {
-    color: #eaf5ff
+    color: var(--text)
 }
 
 .tbtn.on {
-    color: #03150c;
-    background: linear-gradient(135deg, #8ce8ff, #5ab0ff)
+    color: #fff;
+    background: var(--accent)
 }
 
-.tbtn.on[data-n=ultra] {
-    background: linear-gradient(135deg, #c9a6ff, #8b6cf6);
-    color: #160a2e
+.tbtn.on b {
+    opacity: 1
 }
 
 .plusW {
@@ -954,20 +971,20 @@ svg {
 }
 
 #plusBtn {
-    width: 44px;
-    height: 44px;
+    width: 46px;
+    height: 46px;
     border-radius: 13px;
     border: 1px solid var(--line2);
-    background: rgba(120, 190, 255, .08);
-    color: #bfe6ff;
+    background: #fff;
+    color: var(--text2);
     display: grid;
     place-items: center;
-    transition: .22s
+    transition: .18s
 }
 
 #plusBtn svg {
-    width: 18px;
-    height: 18px;
+    width: 19px;
+    height: 19px;
     stroke: currentColor;
     fill: none;
     stroke-width: 2;
@@ -976,7 +993,7 @@ svg {
 }
 
 #plusBtn:hover {
-    background: rgba(120, 190, 255, .16)
+    background: var(--bg3)
 }
 
 .plusW.open #plusBtn svg {
@@ -985,19 +1002,18 @@ svg {
 
 .pmenu {
     position: absolute;
-    bottom: calc(100% + 12px);
+    bottom: calc(100% + 10px);
     left: 0;
-    min-width: 210px;
-    padding: 7px;
+    min-width: 214px;
+    padding: 6px;
     border-radius: 13px;
-    background: rgba(10, 18, 34, .97);
-    border: 1px solid var(--line2);
-    backdrop-filter: blur(14px);
-    box-shadow: 0 14px 36px rgba(0, 0, 0, .5);
+    background: #fff;
+    border: 1px solid var(--line);
+    box-shadow: var(--sh-lg);
     opacity: 0;
-    transform: translateY(8px) scale(.96);
+    transform: translateY(8px) scale(.97);
     pointer-events: none;
-    transition: .22s;
+    transition: .18s;
     z-index: 60
 }
 
@@ -1016,16 +1032,16 @@ svg {
     border: none;
     border-radius: 9px;
     background: none;
-    color: var(--muted);
-    font: 500 11.5px var(--fa);
+    color: var(--text2);
+    font: 500 12px var(--fa);
     text-align: right;
-    transition: .18s
+    transition: .14s
 }
 
 .pmenu button svg {
-    width: 15px;
-    height: 15px;
-    stroke: currentColor;
+    width: 16px;
+    height: 16px;
+    stroke: var(--muted);
     fill: none;
     stroke-width: 1.7;
     stroke-linecap: round;
@@ -1034,20 +1050,19 @@ svg {
 }
 
 .pmenu button:hover {
-    background: rgba(120, 190, 255, .09);
-    color: #eaf5ff
+    background: var(--bg3)
 }
 
 /* ═══ مودال‌ها ═══ */
 .overlay {
     position: fixed;
     inset: 0;
-    background: rgba(2, 5, 11, .6);
-    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, .4);
     z-index: 70;
     display: none;
     align-items: center;
-    justify-content: center
+    justify-content: center;
+    padding: 20px
 }
 
 .overlay.open {
@@ -1055,67 +1070,74 @@ svg {
 }
 
 .modal {
-    width: min(520px, 92vw);
+    width: min(520px, 94vw);
     max-height: 84vh;
     overflow: auto;
-    border-radius: 17px;
-    padding: 22px;
-    background: linear-gradient(180deg, rgba(15, 26, 48, .97), rgba(7, 13, 26, .98));
-    border: 1px solid var(--line2);
-    box-shadow: 0 34px 80px rgba(0, 0, 0, .6)
+    border-radius: 18px;
+    padding: 24px;
+    background: #fff;
+    border: 1px solid var(--line);
+    box-shadow: var(--sh-lg)
 }
 
 .modal.wide {
-    width: min(560px, 94vw)
+    width: min(580px, 94vw)
 }
 
 .modal h3 {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 700;
     display: flex;
     gap: 9px;
     align-items: center;
-    margin-bottom: 12px
+    margin-bottom: 13px;
+    color: var(--text)
 }
 
 .mrow {
     display: flex;
     gap: 10px;
-    margin-top: 15px
+    margin-top: 18px
 }
 
 .muted {
     color: var(--muted);
-    font-size: 12px;
+    font-size: 12.5px;
     line-height: 2
 }
 
 .btn {
-    padding: 10px 19px;
+    padding: 10px 18px;
     border-radius: 10px;
     border: 1px solid var(--line2);
-    background: rgba(120, 190, 255, .08);
-    color: #e6f2ff;
+    background: #fff;
+    color: var(--text2);
     font: 600 12.5px var(--fa);
-    transition: .2s
+    transition: .18s
 }
 
 .btn:hover {
-    background: rgba(120, 190, 255, .16)
+    background: var(--bg3)
 }
 
 .btn.g {
-    background: linear-gradient(90deg, #17e08b, #2bd4e8);
-    color: #04231a;
-    border: none;
-    font-weight: 700
+    background: var(--accent);
+    color: #fff;
+    border-color: transparent
+}
+
+.btn.g:hover {
+    background: var(--accent-d)
 }
 
 .btn.r {
-    background: linear-gradient(90deg, #ff6b7a, #ff8f6b);
-    color: #2a0508;
-    border: none;
-    font-weight: 700
+    background: var(--red);
+    color: #fff;
+    border-color: transparent
+}
+
+.btn.r:hover {
+    background: #b91c1c
 }
 
 .tin {
@@ -1123,143 +1145,146 @@ svg {
     padding: 12px 14px;
     border-radius: 12px;
     border: 1px solid var(--line2);
-    background: rgba(10, 20, 38, .7);
+    background: #fff;
     color: var(--text);
-    font: 400 13px var(--fa);
+    font: 400 13.5px var(--fa);
     outline: none;
-    margin-top: 10px
+    margin-top: 12px
 }
 
 .tin:focus {
-    border-color: rgba(120, 220, 255, .5)
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-bg)
 }
 
 .ab-head {
     display: flex;
     align-items: center;
-    gap: 10px
+    gap: 11px
 }
 
 .ab-head .aic {
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     border-radius: 11px;
     display: grid;
     place-items: center;
     flex-shrink: 0;
-    border: 1px solid var(--line2);
-    background: rgba(120, 190, 255, .08)
+    background: color-mix(in srgb, var(--ac) 11%, #fff);
+    border: 1px solid color-mix(in srgb, var(--ac) 28%, #fff)
 }
 
 .ab-head .aic svg {
-    width: 20px;
-    height: 20px;
+    width: 21px;
+    height: 21px;
     stroke: var(--ac);
     fill: none;
-    stroke-width: 1.7;
+    stroke-width: 1.8;
     stroke-linecap: round;
     stroke-linejoin: round
 }
 
 .ab-head h4 {
-    font-size: 13.5px
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text)
 }
 
 .ab-head .conf {
     margin-right: auto;
     font: 700 12px var(--en);
-    color: #a9e9ff;
+    color: var(--accent-d);
     direction: ltr
 }
 
 .ab-hl {
-    font-size: 12.5px;
+    font-size: 13px;
     font-weight: 600;
     line-height: 2;
-    color: #eaf5ff;
-    margin: 10px 0 12px;
-    padding: 9px 12px;
-    border-radius: 10px;
-    background: rgba(120, 190, 255, .06);
+    color: var(--text2);
+    margin: 12px 0;
+    padding: 11px 13px;
+    border-radius: 11px;
+    background: var(--bg2);
     border: 1px solid var(--line)
 }
 
 .arg {
     border: 1px solid var(--line);
-    border-radius: 11px;
-    padding: 10px 12px;
-    margin-bottom: 8px;
-    background: rgba(255, 255, 255, .02)
+    border-radius: 12px;
+    padding: 11px 13px;
+    margin-bottom: 9px;
+    background: #fff
 }
 
 .arg .ah {
     display: flex;
     gap: 8px;
     align-items: center;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
     flex-wrap: wrap
 }
 
 .arg .angle {
-    font: 600 9px var(--fa);
-    color: var(--cyan);
-    background: rgba(65, 216, 255, .1);
-    border: 1px solid rgba(65, 216, 255, .3);
-    padding: 3px 8px;
+    font: 600 9.5px var(--fa);
+    color: var(--accent-d);
+    background: var(--accent-bg);
+    border: 1px solid #d3ede4;
+    padding: 3px 9px;
     border-radius: 99px
 }
 
 .arg .claim {
-    font-size: 12px;
+    font-size: 12.5px;
     font-weight: 700;
-    color: #eaf5ff
+    color: var(--text)
 }
 
 .arg .bec {
-    font-size: 11px;
+    font-size: 11.5px;
     color: var(--muted);
     line-height: 1.9
 }
 
 .arg .bec b {
-    color: #9ccfff;
+    color: var(--text2);
     font-weight: 600
 }
 
 .evs {
     display: flex;
-    gap: 5px;
+    gap: 6px;
     flex-wrap: wrap;
-    margin-top: 7px
+    margin-top: 8px
 }
 
 .evs span {
-    font: 500 9px var(--fa);
+    font: 500 9.5px var(--fa);
     color: var(--muted);
-    background: rgba(255, 255, 255, .04);
-    border: 1px dashed rgba(122, 196, 255, .25);
-    padding: 3px 8px;
+    background: var(--bg3);
+    border: 1px solid var(--line);
+    padding: 3px 9px;
     border-radius: 99px
 }
 
 .ab-sec {
-    font: 700 10px var(--fa);
+    font: 700 10.5px var(--fa);
     color: var(--dim);
-    margin: 12px 0 7px
+    margin: 14px 0 8px
 }
 
 .risk,
 .condc {
-    font-size: 11px;
+    font-size: 11.5px;
     line-height: 1.9;
-    padding-right: 14px;
+    padding-right: 15px;
     position: relative;
-    margin-bottom: 4px;
-    color: #ffc9ce
+    margin-bottom: 5px;
+    color: #b42318
 }
 
 .condc {
-    color: #f5dfa8
+    color: #b54708
 }
 
 .risk::before {
@@ -1281,33 +1306,34 @@ svg {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: var(--gold)
+    background: #d97706
 }
 
 .deep {
-    font-size: 10px;
-    color: #c9a6ff;
-    border: 1px solid rgba(150, 110, 255, .3);
-    background: rgba(150, 110, 255, .08);
+    font-size: 10.5px;
+    color: #6d28d9;
+    border: 1px solid #e6dcfb;
+    background: #f6f2fe;
     border-radius: 10px;
-    padding: 8px 11px;
-    margin-top: 10px
+    padding: 9px 12px;
+    margin-top: 11px
 }
 
 .hrow {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px 12px;
+    padding: 11px 13px;
     border: 1px solid var(--line);
     border-radius: 11px;
     margin-bottom: 8px;
-    font-size: 11.5px
+    font-size: 12px;
+    color: var(--text2)
 }
 
 .hrow b {
     font-family: var(--en);
-    color: #bfe6ff
+    color: var(--text)
 }
 
 .hrow span {
@@ -1323,7 +1349,7 @@ svg {
     display: none;
     align-items: center;
     justify-content: center;
-    background: rgba(2, 4, 9, .97)
+    background: #fff
 }
 
 .exitScr.show {
@@ -1333,30 +1359,31 @@ svg {
 .exCard {
     text-align: center;
     padding: 36px;
-    max-width: 420px
+    max-width: 430px
 }
 
 .exLogo {
     width: 70px;
     height: 70px;
-    margin: 0 auto 16px;
+    margin: 0 auto 18px;
     border-radius: 50%;
     display: grid;
     place-items: center;
-    background: rgba(90, 180, 255, .08);
-    border: 1px solid var(--line2)
+    background: var(--accent-bg);
+    border: 1px solid #d3ede4
 }
 
 .exCard h2 {
-    font-size: 18px;
-    margin-bottom: 9px
+    font-size: 19px;
+    margin-bottom: 10px;
+    color: var(--text)
 }
 
 .exCard p {
-    font-size: 12px;
+    font-size: 12.5px;
     color: var(--muted);
     line-height: 2;
-    margin-bottom: 20px
+    margin-bottom: 22px
 }
 
 .exRow {
@@ -1367,20 +1394,17 @@ svg {
 
 .toast {
     position: fixed;
-    bottom: 88px;
+    bottom: 84px;
     left: 50%;
-    transform: translateX(-50%) translateY(14px);
+    transform: translateX(-50%) translateY(12px);
     z-index: 90;
     opacity: 0;
-    display: flex;
-    gap: 9px;
-    align-items: center;
     padding: 10px 18px;
-    border-radius: 12px;
-    font-size: 12px;
-    color: #eaf5ff;
-    background: rgba(10, 20, 38, .95);
-    border: 1px solid var(--line2);
+    border-radius: 11px;
+    font-size: 12.5px;
+    color: #fff;
+    background: #0d0d0d;
+    box-shadow: var(--sh-lg);
     transition: .3s;
     pointer-events: none
 }
@@ -1388,14 +1412,6 @@ svg {
 .toast.show {
     opacity: 1;
     transform: translateX(-50%) translateY(0)
-}
-
-.toast i {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 8px var(--green)
 }
 
 @media (prefers-reduced-motion:reduce) {
@@ -1406,15 +1422,13 @@ svg {
 }
 
 @media(max-width:900px) {
-
-    .hdr,
-    .ftr {
-        padding-left: 52px;
-        padding-right: 52px
+    .board {
+        padding: 20px 52px
     }
 
     .ftr {
-        flex-wrap: wrap
+        flex-wrap: wrap;
+        padding: 11px 14px
     }
 
     .think {
@@ -1428,27 +1442,24 @@ svg {
     }
 
     .member {
-        width: 136px
+        width: 150px
     }
 }
 
 @media(max-width:600px) {
-
-    .hdr,
-    .ftr {
-        padding-left: 48px;
-        padding-right: 48px
-    }
-
     .ebar {
-        transform: translateY(-50%) scale(.85)
+        transform: translateY(-50%) scale(.82)
     }
 
     .ttl h2 {
-        font-size: 12px
+        font-size: 12.5px
     }
 
     .member {
-        width: calc(50% - 8px)
+        width: calc(50% - 7px)
+    }
+
+    .sb-bar {
+        display: none
     }
 }

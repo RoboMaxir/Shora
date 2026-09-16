@@ -11,8 +11,16 @@ from typing import Optional, List, Dict, Any
 from sqlalchemy.orm import Session
 
 from app.models import models
-from app.workflow.state_machine import state_machine, DecisionStatus, RunStatus, TaskStatus
+from app.workflow.state_machine import DecisionStatus, RunStatus, TaskStatus
 from app.workflow.history import record_event, WorkflowEventType
+from app.services.council_engine import (
+    AGENT_REGISTRY,
+    execute_agent,
+    gather_context,
+    detect_conflicts,
+    synthesize_analysis,
+    create_dossier,
+)
 
 
 class WorkflowOrchestrator:
@@ -32,11 +40,11 @@ class WorkflowOrchestrator:
     def __init__(self, db: Session):
         self.db = db
     
-    def start_run(self, run_id: int) -> models.Run:
+    async def start_run(self, run_id: int) -> models.Run:
         """
         Start a Run by transitioning from PENDING → RUNNING.
         
-        Creates initial tasks for the PLANNING phase.
+        Creates initial tasks for the council execution workflow.
         """
         run = self.db.query(models.Run).filter(models.Run.id == run_id).first()
         if not run:
@@ -44,14 +52,6 @@ class WorkflowOrchestrator:
         
         if run.status != RunStatus.PENDING:
             raise ValueError(f"Run is not in PENDING state (current: {run.status})")
-        
-        # Validate transition
-        is_valid, error = state_machine.validate_run_transition(
-            run.status.value, 
-            RunStatus.RUNNING.value
-        )
-        if not is_valid:
-            raise ValueError(f"Invalid transition: {error}")
         
         # Execute transition
         previous_state = run.status.value
@@ -67,7 +67,7 @@ class WorkflowOrchestrator:
             decision_id=run.decision_id,
             previous_state=previous_state,
             new_state=RunStatus.RUNNING.value,
-            reason="Starting workflow execution"
+            reason="Starting council execution workflow"
         )
         
         # Update decision status
@@ -75,46 +75,128 @@ class WorkflowOrchestrator:
         if decision.status == DecisionStatus.DRAFT:
             decision.status = DecisionStatus.PLANNING
         
-        # Create initial planning task
-        self._create_planning_task(run)
+        # Create council execution tasks
+        self._create_council_tasks(run)
         
         self.db.commit()
         self.db.refresh(run)
         
         return run
     
-    def _create_planning_task(self, run: models.Run) -> models.Task:
-        """Create the initial planning/decision framing task."""
-        task = models.Task(
+    def _create_council_tasks(self, run: models.Run) -> None:
+        """Create tasks for council execution workflow."""
+        decision = run.decision
+        
+        # Task 0: Context/Evidence gathering
+        context_task = models.Task(
             run_id=run.id,
-            task_type="decision_framing",
-            capability="planning",
+            task_type="context_gathering",
+            capability="evidence",
             input_data={
-                "decision_id": run.decision_id,
-                "question": run.decision.question,
-                "context": run.decision.context,
+                "decision_id": decision.id,
+                "question": decision.question,
             },
             order=0,
             status=TaskStatus.PENDING,
         )
+        self.db.add(context_task)
+        self.db.flush()
         
-        self.db.add(task)
-        self.db.flush()  # Get task ID
-        
-        # Record event
         record_event(
             db_session=self.db,
             run_id=run.id,
             event_type=WorkflowEventType.TASK_CREATED,
             actor="orchestrator",
             decision_id=run.decision_id,
-            task_id=task.id,
+            task_id=context_task.id,
             new_state=TaskStatus.PENDING.value,
-            reason="Created initial planning task",
-            metadata={"task_type": "decision_framing"}
+            reason="Created context gathering task",
         )
         
-        return task
+        # Task 1-3: Agent analyses (Strategy, Finance, Market)
+        agent_order = ["strategy", "finance", "market"]
+        for i, agent_name in enumerate(agent_order, start=1):
+            agent = AGENT_REGISTRY.get(agent_name)
+            if not agent:
+                continue
+            
+            agent_task = models.Task(
+                run_id=run.id,
+                task_type=f"agent_analysis_{agent_name}",
+                capability=agent_name,
+                input_data={
+                    "agent": agent_name,
+                    "role": agent.role,
+                    "depends_on": [context_task.id],
+                },
+                order=i,
+                depends_on=[context_task.id],
+                status=TaskStatus.PENDING,
+            )
+            self.db.add(agent_task)
+            self.db.flush()
+            
+            record_event(
+                db_session=self.db,
+                run_id=run.id,
+                event_type=WorkflowEventType.TASK_CREATED,
+                actor="orchestrator",
+                decision_id=run.decision_id,
+                task_id=agent_task.id,
+                new_state=TaskStatus.PENDING.value,
+                reason=f"Created {agent_name} analysis task",
+            )
+        
+        # Task 4: Cross-review
+        review_task = models.Task(
+            run_id=run.id,
+            task_type="cross_review",
+            capability="review",
+            input_data={"phase": "conflict_detection"},
+            order=4,
+            depends_on=[t.id for t in run.tasks if t.task_type.startswith("agent_analysis_")],
+            status=TaskStatus.PENDING,
+        )
+        self.db.add(review_task)
+        self.db.flush()
+        
+        record_event(
+            db_session=self.db,
+            run_id=run.id,
+            event_type=WorkflowEventType.TASK_CREATED,
+            actor="orchestrator",
+            decision_id=run.decision_id,
+            task_id=review_task.id,
+            new_state=TaskStatus.PENDING.value,
+            reason="Created cross-review task",
+        )
+        
+        # Task 5: Synthesis
+        synthesis_task = models.Task(
+            run_id=run.id,
+            task_type="synthesis",
+            capability="synthesis",
+            input_data={"phase": "decision_support"},
+            order=5,
+            depends_on=[review_task.id],
+            status=TaskStatus.PENDING,
+        )
+        self.db.add(synthesis_task)
+        self.db.flush()
+        
+        record_event(
+            db_session=self.db,
+            run_id=run.id,
+            event_type=WorkflowEventType.TASK_CREATED,
+            actor="orchestrator",
+            decision_id=run.decision_id,
+            task_id=synthesis_task.id,
+            new_state=TaskStatus.PENDING.value,
+            reason="Created synthesis task",
+        )
+        
+        # Update decision status to ANALYZING
+        decision.status = DecisionStatus.ANALYZING
     
     def complete_task(
         self,

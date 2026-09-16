@@ -8,6 +8,8 @@ __pycache__/
 env/
 venv/
 .venv/
+.ENV
+.venv.bak/
 pip-log.txt
 pip-delete-this-directory.txt
 .tox/
@@ -21,6 +23,8 @@ coverage.xml
 *.pot
 *.pyc
 *.pyo
+*.pyd
+.MF
 .pytest_cache/
 .mypy_cache/
 
@@ -41,28 +45,35 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
 # Environment
 .env
+.venv
+env/
+venv/
+ENV
+.ENV
+.env.bak
 .env.local
-*.env.*
+.env.dev
+.env.prod
+.env.*
+!.env.example
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
-*.tmp
-
-# Database
-*.sqlite
-*.sqlite3
-*.db
-
-# Alembic
-alembic_version/
+*~
 
 # OS
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 ```

@@ -10,6 +10,7 @@ import enum
 
 from app.db.database import Base
 
+from app.workflow import history
 
 class Tenant(Base):
     """Tenant represents an organization (e.g., BOLUT customer)."""
@@ -114,7 +115,7 @@ class Decision(Base):
     creator = relationship("User", back_populates="decisions")
     revisions = relationship("DecisionRevision", back_populates="decision", cascade="all, delete-orphan", foreign_keys="DecisionRevision.decision_id")
     runs = relationship("Run", back_populates="decision", cascade="all, delete-orphan", foreign_keys="Run.decision_id")
-    events = relationship("WorkflowEvent", back_populates="decision", foreign_keys="WorkflowEvent.decision_id")
+    events = relationship(history.WorkflowEvent, back_populates="decision", foreign_keys="WorkflowEvent.decision_id")
 
 
 class DecisionRevision(Base):
@@ -193,7 +194,7 @@ class Run(Base):
     # Relationships
     decision = relationship("Decision", back_populates="runs")
     tasks = relationship("Task", back_populates="run", cascade="all, delete-orphan")
-    events = relationship("WorkflowEvent", back_populates="run")
+    events = relationship(history.WorkflowEvent, back_populates="run")
 
 
 class TaskStatus(str, enum.Enum):
@@ -245,7 +246,7 @@ class Task(Base):
     # Relationships
     run = relationship("Run", back_populates="tasks")
     attempts = relationship("TaskAttempt", back_populates="task", cascade="all, delete-orphan")
-    events = relationship("WorkflowEvent", back_populates="task")
+    events = relationship(history.WorkflowEvent, back_populates="task")
 
 
 class TaskAttempt(Base):
@@ -406,49 +407,3 @@ class AuditEvent(Base):
 
 # ═══ Add WorkflowEvent model at the end ═══
 
-class WorkflowEvent(Base):
-    """
-    WorkflowEvent records every important state transition and workflow action.
-    
-    This provides:
-    - Full audit trail for compliance
-    - Debugging capabilities
-    - Progress reconstruction
-    - Failure analysis
-    """
-    __tablename__ = "workflow_events"
-    
-    id = Column(Integer, primary_key=True, index=True)
-    run_id = Column(Integer, ForeignKey("runs.id"), nullable=False, index=True)
-    decision_id = Column(Integer, ForeignKey("decisions.id"), nullable=True, index=True)
-    task_id = Column(Integer, ForeignKey("tasks.id"), nullable=True, index=True)
-    
-    # Event type
-    event_type = Column(SQLEnum(
-        'RUN_CREATED', 'RUN_STARTED', 'RUN_COMPLETED', 'RUN_FAILED', 'RUN_CANCELLED',
-        'STATE_TRANSITION',
-        'TASK_CREATED', 'TASK_STARTED', 'TASK_COMPLETED', 'TASK_FAILED', 'TASK_RETRYING', 'TASK_SKIPPED',
-        'DECISION_CREATED', 'DECISION_UPDATED', 'HUMAN_DECISION_MADE',
-        'TOKEN_USAGE_RECORDED', 'COST_ESTIMATED',
-        'ERROR_OCCURRED', 'RECOVERY_ATTEMPTED',
-        name='workfloweventtype'
-    ), nullable=False)
-    
-    # State transition info
-    previous_state = Column(String(50), nullable=True)
-    new_state = Column(String(50), nullable=True)
-    
-    # Actor (system component or user)
-    actor = Column(String(100), nullable=False)  # e.g., "orchestrator", "user:123", "worker"
-    
-    # Event details
-    reason = Column(Text, nullable=True)
-    event_data = Column(JSON, nullable=True)  # Renamed from 'metadata' to avoid conflict
-    
-    # Timestamps
-    created_at = Column(DateTime, default=datetime.utcnow, index=True)
-    
-    # Relationships
-    run = relationship("Run", back_populates="events")
-    decision = relationship("Decision", back_populates="events")
-    task = relationship("Task", back_populates="events")

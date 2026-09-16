@@ -112,9 +112,9 @@ class Decision(Base):
     # Relationships
     tenant = relationship("Tenant", back_populates="decisions")
     creator = relationship("User", back_populates="decisions")
-    revisions = relationship("DecisionRevision", back_populates="decision", cascade="all, delete-orphan")
-    runs = relationship("Run", back_populates="decision", cascade="all, delete-orphan")
-    events = relationship("WorkflowEvent", back_populates="decision")
+    revisions = relationship("DecisionRevision", back_populates="decision", cascade="all, delete-orphan", foreign_keys="DecisionRevision.decision_id")
+    runs = relationship("Run", back_populates="decision", cascade="all, delete-orphan", foreign_keys="Run.decision_id")
+    events = relationship("WorkflowEvent", back_populates="decision", foreign_keys="WorkflowEvent.decision_id")
 
 
 class DecisionRevision(Base):
@@ -443,7 +443,7 @@ class WorkflowEvent(Base):
     
     # Event details
     reason = Column(Text, nullable=True)
-    metadata = Column(JSON, nullable=True)
+    event_data = Column(JSON, nullable=True)  # Renamed from 'metadata' to avoid conflict
     
     # Timestamps
     created_at = Column(DateTime, default=datetime.utcnow, index=True)

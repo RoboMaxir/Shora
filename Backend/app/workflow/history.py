@@ -58,6 +58,7 @@ class WorkflowEvent(Base):
     - Failure analysis
     """
     __tablename__ = "workflow_events"
+    __table_args__ = {'extend_existing': True}
     
     id = Column(Integer, primary_key=True, index=True)
     run_id = Column(Integer, ForeignKey("runs.id"), nullable=False, index=True)

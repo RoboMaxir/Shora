@@ -2,12 +2,13 @@
 API router for Runs.
 
 Endpoints:
-- GET    /api/runs/{id}           Get a run by ID
-- PUT    /api/runs/{id}           Update a run
-- GET    /api/runs/{id}/tasks     Get tasks for a run
-- POST   /api/runs/{id}/tasks     Create a task for a run
+- GET    /api/runs/            List all runs
+- GET    /api/runs/{id}        Get a run by ID
+- POST   /api/runs/{id}/execute Execute a council run
+- GET    /api/runs/{id}/dossier Get the decision dossier
+- GET    /api/runs/{id}/tasks  Get tasks for a run
 """
-from typing import List
+from typing import List, Optional, Dict, Any
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from datetime import datetime
@@ -20,7 +21,16 @@ from app.schemas import schemas
 router = APIRouter()
 
 
-@router.get("/{run_id}", response_model=schemas.RunWithTasksResponse)
+@router.get("/", response_model=List[schemas.RunResponse])
+def list_runs(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    """
+    List all Runs.
+    """
+    runs = db.query(models.Run).offset(skip).limit(limit).all()
+    return runs
+
+
+@router.get("/{run_id}", response_model=schemas.RunWithDetailsResponse)
 def get_run(run_id: int, db: Session = Depends(get_db)):
     """
     Get a Run by ID with its tasks.
@@ -33,33 +43,106 @@ def get_run(run_id: int, db: Session = Depends(get_db)):
     return run
 
 
-@router.put("/{run_id}", response_model=schemas.RunResponse)
-def update_run(
-    run_id: int,
-    run_update: schemas.RunUpdate,
-    db: Session = Depends(get_db)
-):
+@router.post("/{run_id}/execute", response_model=schemas.RunResponse)
+async def execute_run(run_id: int, db: Session = Depends(get_db)):
     """
-    Update a Run status and metadata.
+    Execute a Council Run.
+    
+    This triggers the full council workflow: Strategy → Finance → Market → Cross Review → Synthesis → Dossier
     """
     run = db.query(models.Run).filter(models.Run.id == run_id).first()
     
     if not run:
         raise HTTPException(status_code=404, detail="Run not found")
     
-    # Update fields
-    update_data = run_update.model_dump(exclude_unset=True)
-    for field, value in update_data.items():
-        setattr(run, field, value)
+    # Check if already running or completed
+    if run.status in [models.RunStatus.RUNNING, models.RunStatus.COMPLETED]:
+        raise HTTPException(status_code=400, detail="Run is already executing or completed")
     
+    # Update status to RUNNING
+    run.status = models.RunStatus.RUNNING
+    run.started_at = datetime.utcnow()
     db.commit()
-    db.refresh(run)
     
-    return run
+    # Import and execute council engine
+    try:
+        from app.services.council_engine import CouncilEngine
+        engine = CouncilEngine(db)
+        await engine.execute_run(run_id)
+        
+        # Refresh after execution
+        db.refresh(run)
+        return run
+        
+    except Exception as e:
+        run.status = models.RunStatus.FAILED
+        run.error_message = str(e)
+        db.commit()
+        raise HTTPException(status_code=500, detail=f"Council execution failed: {str(e)}")
+
+
+@router.get("/{run_id}/dossier", response_model=Dict[str, Any])
+def get_run_dossier(run_id: int, db: Session = Depends(get_db)):
+    """
+    Get the Decision Dossier for a completed run.
+    """
+    run = db.query(models.Run).filter(models.Run.id == run_id).first()
+    
+    if not run:
+        raise HTTPException(status_code=404, detail="Run not found")
+    
+    # Build dossier from run data
+    decision = run.decision
+    tasks = run.tasks
+    
+    # Extract agent outputs
+    agent_outputs = {}
+    conflicts = []
+    synthesis = {}
+    
+    for task in tasks:
+        if task.task_type and task.task_type.startswith('agent_analysis_'):
+            agent_name = task.task_type.replace('agent_analysis_', '')
+            if task.output_data:
+                agent_outputs[agent_name] = task.output_data
+        elif task.task_type == 'cross_review':
+            if task.output_data:
+                conflicts = task.output_data.get('conflicts', [])
+        elif task.task_type == 'synthesis':
+            if task.output_data:
+                synthesis = task.output_data
+    
+    dossier = {
+        "decision": {
+            "id": decision.id,
+            "title": decision.title,
+            "question": decision.question,
+            "objectives": decision.objectives,
+            "constraints": decision.constraints,
+            "context": decision.context
+        } if decision else {},
+        "run": {
+            "id": run.id,
+            "run_number": run.run_number,
+            "status": run.status.value if hasattr(run.status, 'value') else run.status,
+            "started_at": run.started_at.isoformat() if run.started_at else None,
+            "completed_at": run.completed_at.isoformat() if run.completed_at else None
+        },
+        "agent_outputs": agent_outputs,
+        "conflicts": conflicts,
+        "synthesis": synthesis,
+        "human_decision": {
+            "status": decision.human_decision_status.value if decision and decision.human_decision_status else None,
+            "notes": decision.human_decision_notes if decision else None,
+            "decided_at": decision.human_decided_at.isoformat() if decision and decision.human_decided_at else None
+        } if decision else {}
+    }
+    
+    return dossier
 
 
 @router.get("/{run_id}/tasks", response_model=List[schemas.TaskResponse])
-def get_tasks_for_run(run_id: int, db: Session = Depends(get_db)):
+def get_run_tasks(run_id: int, db: Session = Depends(get_db)):
     """
     Get all Tasks for a Run.
     """
@@ -69,87 +152,3 @@ def get_tasks_for_run(run_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Run not found")
     
     return run.tasks
-
-
-@router.post("/{run_id}/tasks", response_model=schemas.TaskResponse, status_code=status.HTTP_201_CREATED)
-def create_task_for_run(
-    run_id: int,
-    task_data: schemas.TaskCreate,
-    db: Session = Depends(get_db)
-):
-    """
-    Create a new Task for a Run.
-    
-    Tasks represent bounded execution units like:
-    - decision_framing
-    - evidence_retrieval
-    - financial_analysis
-    - operational_analysis
-    - cross_review
-    - synthesis
-    """
-    run = db.query(models.Run).filter(models.Run.id == run_id).first()
-    
-    if not run:
-        raise HTTPException(status_code=404, detail="Run not found")
-    
-    # Check max tasks limit
-    current_task_count = db.query(models.Task).filter(models.Task.run_id == run_id).count()
-    if current_task_count >= run.max_tasks:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Maximum task limit ({run.max_tasks}) reached for this run"
-        )
-    
-    # Determine task order
-    last_task = db.query(models.Task).filter(
-        models.Task.run_id == run_id
-    ).order_by(models.Task.order.desc()).first()
-    
-    order = (last_task.order + 1) if last_task else 0
-    
-    # Create task
-    db_task = models.Task(
-        run_id=run_id,
-        task_type=task_data.task_type,
-        capability=task_data.capability,
-        input_data=task_data.input_data,
-        order=order,
-        depends_on=task_data.depends_on,
-        status=models.TaskStatus.PENDING,
-    )
-    
-    db.add(db_task)
-    db.commit()
-    db.refresh(db_task)
-    
-    return db_task
-
-
-@router.put("/{run_id}/tasks/{task_id}", response_model=schemas.TaskResponse)
-def update_task(
-    run_id: int,
-    task_id: int,
-    task_update: schemas.TaskUpdate,
-    db: Session = Depends(get_db)
-):
-    """
-    Update a Task's status and output.
-    """
-    task = db.query(models.Task).filter(
-        models.Task.id == task_id,
-        models.Task.run_id == run_id
-    ).first()
-    
-    if not task:
-        raise HTTPException(status_code=404, detail="Task not found")
-    
-    # Update fields
-    update_data = task_update.model_dump(exclude_unset=True)
-    for field, value in update_data.items():
-        setattr(task, field, value)
-    
-    db.commit()
-    db.refresh(task)
-    
-    return task

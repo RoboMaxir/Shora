@@ -23,6 +23,11 @@ class Settings(BaseSettings):
     llm_provider: str = "openai"
     llm_api_key: Optional[str] = None
     
+    # Platform Integration
+    use_mock_platform: bool = True
+    platform_base_url: Optional[str] = None
+    platform_api_key: Optional[str] = None
+    
     # Cost Control
     max_tokens_per_run: int = 100000
     max_model_calls_per_run: int = 20

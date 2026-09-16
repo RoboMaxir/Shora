@@ -1,0 +1,947 @@
+# 📊 گزارش جامع بازرسی فنی پروژه SHORA
+
+## مرحله ۱ — Inventory واقعی پروژه
+
+### ساختار Repository
+
+/workspace
+├── Architecture.md              # مستندات معماری (2044 خط)
+├── README.md                    # راهنمای فارسی (184 خط)
+│
+├── Backend/                     # ✅ FastAPI Backend
+│   ├── app/
+│   │   ├── api/                 # ✅ API routers
+│   │   │   ├── decisions.py     # 6 endpoints
+│   │   │   ├── runs.py          # 5 endpoints  
+│   │   │   └── workflow.py      # 6 endpoints
+│   │   ├── core/
+│   │   │   └── config.py        # ✅ Settings management
+│   │   ├── db/
+│   │   │   └── database.py      # ✅ SQLAlchemy setup
+│   │   ├── models/
+│   │   │   └── models.py        # ✅ 12 SQLAlchemy models
+│   │   ├── schemas/
+│   │   │   ├── schemas.py       # ✅ Pydantic schemas
+│   │   │   └── workflow_schemas.py
+│   │   ├── services/
+│   │   │   └── __init__.py      # ✅ Service layer (WorkflowOrchestrator)
+│   │   ├── workflow/
+│   │   │   ├── state_machine.py # ✅ State transition validation
+│   │   │   ├── orchestrator.py  # ✅ Workflow orchestration
+│   │   │   └── history.py       # ✅ Event recording
+│   │   └── main.py              # ✅ FastAPI application
+│   ├── migrations/
+│   │   ├── env.py
+│   │   └── versions/
+│   │       ├── 001_initial.py   # ✅ Core tables
+│   │       └── 002_workflow_events.py
+│   ├── tests/
+│   │   └── test_workflow.py     # ✅ 13 test cases
+│   ├── requirements.txt         # ✅ 8 dependencies
+│   ├── .env.example
+│   └── setup.sh
+│
+└── FrontEnd/                    # ⚠️ Static HTML/CSS/JS
+    ├── index.html               # UI structure
+    ├── style.css                # Styling (2180 lines)
+    ├── src.js                   # Client logic (692 lines)
+    ├── chart.umd.min.js         # Chart.js
+    └── gsap.min.js              # GSAP animations
+
+canvascanvas
+
+### وضعیت اجزا
+
+| Component                 | Status      | Notes                                  |
+| ------------------------- | ----------- | -------------------------------------- |
+| __Backend Structure__     | 🟢 Complete | FastAPI با معماری لایه‌ای صحیح         |
+| __Frontend Structure__    | 🟢 Complete | UI کامل اما disconnected               |
+| __Database Models__       | 🟢 Complete | 12 مدل با relationships                |
+| __Migrations__            | 🟢 Complete | 2 migration فایل                       |
+| __APIs__                  | 🟢 Complete | 17 endpoint                            |
+| __State Machine__         | 🟢 Complete | Explicit transitions                   |
+| __Workflow Orchestrator__ | 🟢 Complete | Task creation & progression            |
+| __History/Audit__         | 🟢 Complete | WorkflowEvent model                    |
+| __Tests__                 | 🟡 Partial  | 13 test cases - نیاز به گسترش          |
+| __LLM Integration__       | 🔴 Missing  | فقط placeholder در config              |
+| __Knowledge Interface__   | 🔴 Missing  | مدل Evidence وجود دارد ولی logic ندارد |
+| __BOLUT Adapter__         | 🔴 Missing  | هیچ adapterی وجود ندارد                |
+| __Authentication__        | 🔴 Missing  | فقط tenant\_id در مدل‌ها               |
+| __Docker/Deployment__     | 🔴 Missing  | هیچ فایل deployment نیست               |
+
+---
+
+## مرحله ۲ — Backend Audit
+
+### FastAPI Structure ✅
+
+__نقاط قوت:__
+
+- معماری لایه‌ای صحیح: `API → Service → Domain → Persistence`
+- Dependency injection با `get_db()`
+- Separation of concerns بین routers, services, models
+- Config management با Pydantic Settings
+
+__مشکلات:__
+
+1. __Services Layer ناکافی__ (`app/services/__init__.py`):
+
+```
+python
+```
+
+# فقط یک import دارد
+
+from app.workflow.orchestrator import WorkflowOrchestrator
+
+__all__ = ["WorkflowOrchestrator"]
+
+canvascanvas
+
+این فایل عملاً خالی است و service layer واقعی نیست.
+
+1. __Error Handling سطحی__:
+
+- هیچ global exception handler وجود ندارد
+- هر router به صورت دستی HTTPException پرتاب می‌کند
+- هیچ logging middleware وجود ندارد
+
+1. __No Request Validation Middleware__:
+
+- هیچ rate limiting نیست
+- هیچ request size limit نیست
+- هیچ input sanitization نیست
+
+### Routers Analysis
+
+#### `decisions.py` (6 endpoints)
+
+| Endpoint         | Method | Path                                 | Status  | Issues                                      |
+| ---------------- | ------ | ------------------------------------ | ------- | ------------------------------------------- |
+| create\_decision | POST   | `/api/decisions/`                    | ✅ Works | No tenant isolation enforcement             |
+| get\_decision    | GET    | `/api/decisions/{id}`                | ✅ Works | No tenant check - IDOR vulnerability        |
+| update\_decision | PUT    | `/api/decisions/{id}`                | ✅ Works | No authorization                            |
+| create\_run      | POST   | `/api/decisions/{id}/run`            | ✅ Works | No validation if decision already completed |
+| get\_runs        | GET    | `/api/decisions/{id}/runs`           | ✅ Works | No tenant filter                            |
+| human\_decision  | POST   | `/api/decisions/{id}/human-decision` | ✅ Works | Good validation                             |
+
+__مشکل امنیتی جدی:__
+
+```
+python
+```
+
+1
+
+2
+
+3
+
+4
+
+canvascanvas
+
+هیچ فیلتر `tenant_id` وجود ندارد! کاربر Tenant A می‌تواند با حدس زدن ID به Decision Tenant B دسترسی پیدا کند.
+
+#### `runs.py` (5 endpoints)
+
+همان مشکل امنیتی فوق وجود دارد. همچنین:
+
+```
+python
+```
+
+1
+
+2
+
+3
+
+4
+
+5
+
+canvascanvas
+
+این خوب است اما کافی نیست - باید tenant هم چک شود.
+
+#### `workflow.py` (6 endpoints)
+
+✅ این فایل بهتر طراحی شده چون از `WorkflowOrchestrator` استفاده می‌کند.
+
+### Database Layer ✅
+
+`app/db/database.py`:
+
+```
+python
+```
+
+1
+
+2
+
+3
+
+canvascanvas
+
+استاندارد و صحیح است.
+
+### Models (`models.py`) - بررسی دقیق
+
+#### Tenant ✅
+
+```
+python
+```
+
+1
+
+2
+
+3
+
+4
+
+5
+
+canvascanvas
+
+__خوب:__ slug یکتا، index دارد.
+
+#### User ⚠️
+
+```
+python
+```
+
+1
+
+2
+
+3
+
+4
+
+canvascanvas
+
+__مشکل:__ هیچ password hash field وجود ندارد (برای MVP قابل قبول است).
+
+#### Decision ✅
+
+```
+python
+```
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+canvascanvas
+
+__خوب:__ تمام fields ضروری وجود دارد.
+
+#### Run ✅
+
+```
+python
+```
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+canvascanvas
+
+__خوب:__ Cost control fields وجود دارند.
+
+#### Task ✅
+
+class Task(Base):
+    run_id = Column(Integer, ForeignKey("runs.id"), nullable=False)
+    task_type = Column(String(100), nullable=False)
+    capability = Column(String(100), nullable=True)
+    status = Column(SQLEnum(TaskStatus), default=TaskStatus.PENDING)
+    attempt_count = Column(Integer, default=0)
+    max_attempts = Column(Integer, default=3)
+    depends_on = Column(JSON, nullable=True)
+
+__خوب:__ Retry logic support دارد.
+
+#### TaskAttempt ✅
+
+class TaskAttempt(Base):
+    llm_model_used = Column(String(100), nullable=True)
+    prompt_version = Column(String(50), nullable=True)
+    tokens_used = Column(Integer, nullable=True)
+    cost_cents = Column(Integer, nullable=True)
+
+__خوب:__ Cost tracking پشتیبانی می‌شود.
+
+#### Evidence ⚠️
+
+class Evidence(Base):
+    tenant_id = Column(Integer, ForeignKey("tenants.id"), nullable=False)
+    content = Column(Text, nullable=False)
+    source_type = Column(String(50), nullable=True)
+    extra_metadata = Column(JSON, nullable=True)  # Renamed from 'metadata'
+
+__مشکل نامگذاری:__ در models.py خط 298 از `extra_metadata` استفاده شده ولی در schema خط 239 هنوز `metadata` است!
+
+#### Finding ⚠️
+
+class TaskAttempt(Base):
+    llm_model_used = Column(String(100), nullable=True)
+    prompt_version = Column(String(50), nullable=True)
+    tokens_used = Column(Integer, nullable=True)
+    cost_cents = Column(Integer, nullable=True)
+
+__مشکل:__ `evidence_ids` یک JSON است نه relationship واقعی - نمی‌توان JOIN زد.
+
+#### Conflict ⚠️
+
+class Evidence(Base):
+    tenant_id = Column(Integer, ForeignKey("tenants.id"), nullable=False)
+    content = Column(Text, nullable=False)
+    source_type = Column(String(50), nullable=True)
+    extra_metadata = Column(JSON, nullable=True)  # Renamed from 'metadata'
+
+__خوب:__ Structure مناسب است ولی هیچ API برای ایجاد conflict وجود ندارد.
+
+#### WorkflowEvent ✅
+
+```
+python
+```
+
+class WorkflowEvent(Base):
+    run_id = Column(Integer, ForeignKey("runs.id"), nullable=False, index=True)
+    event_type = Column(SQLEnum(...), nullable=False)
+    previous_state = Column(String(50), nullable=True)
+    new_state = Column(String(50), nullable=True)
+    actor = Column(String(100), nullable=False)
+    event_metadata = Column(JSON, nullable=True)
+
+__خوب:__ Full audit trail پشتیبانی می‌شود.
+
+---
+
+## مرحله ۳ — Database Audit
+
+### مدل داده برای Workflow
+
+آیا مدل داده می‌تواند این flow را پشتیبانی کند؟
+
+Decision → Run → Tasks → Evidence → Findings → Conflict → Synthesis → Human Decision
+
+__پاسخ:__ ✅ بله، اما با محدودیت‌ها:
+
+| Link                     | Status | Issue                           |
+| ------------------------ | ------ | ------------------------------- |
+| Decision → Run           | ✅      | One-to-many با cascade          |
+| Run → Task               | ✅      | One-to-many با cascade          |
+| Task → Evidence          | ❌      | هیچ relationship مستقیمی نیست   |
+| Task → Finding           | ✅      | ForeignKey وجود دارد            |
+| Finding → Evidence       | ❌      | فقط `evidence_ids` به صورت JSON |
+| Decision → Conflict      | ✅      | ForeignKey وجود دارد            |
+| Conflict → Task          | ⚠️     | ForeignKey هست ولی nullable     |
+| Decision → HumanDecision | ✅      | Fields در خود Decision هستند    |
+
+### Indexes
+
+__خوب:__
+
+- `tenants.slug` - unique index ✅
+- `users.email` - unique index ✅
+- `decisions.tenant_id` - index ✅
+- `workflow_events.created_at` - index ✅
+- `workflow_events.run_id` - index ✅
+
+__کمبودها:__
+
+- هیچ composite index وجود ندارد (مثلاً `(tenant_id, created_at)`)
+- `tasks.run_id` index ندارد (برای queryهای زیاد مهم است)
+- `findings.task_id` index ندارد
+
+### Foreign Keys
+
+تمام FKها properly defined هستند.
+
+### Nullable Fields
+
+__مشکل‌دار:__
+
+# models.py line 341
+finding_type = Column(String(50), nullable=True)  # چرا nullable است؟
+
+---
+
+## مرحله ۴ — State Machine Audit
+
+### Implementation واقعی
+
+`app/workflow/state_machine.py` یک implementation صریح و صحیح دارد:
+
+DECISION_TRANSITIONS: Set[tuple] = {
+    (None, "DRAFT"),
+    ("DRAFT", "FRAMING"),
+    ("FRAMING", "AWAITING_INPUT"),
+    ("FRAMING", "PLANNING"),
+    # ... 40+ transitions
+}
+
+### Validation ✅
+
+def validate_decision_transition(self, from_state: Optional[str], to_state: str):
+    if (from_key, to_state) in self.decision_transitions:
+        return True, ""
+    return False, f"Transition from {from_state} to {to_state} is not allowed"
+
+### آیا Transitionها Enforce می‌شوند؟ ✅
+
+بله، در `orchestrator.py`:
+
+is_valid, error = state_machine.validate_run_transition(
+    run.status.value, 
+    RunStatus.RUNNING.value
+)
+if not is_valid:
+    raise ValueError(f"Invalid transition: {error}")
+### مشکلات State Machine
+
+1. __Decision Status vs Run Status Confusion:__
+
+در models.py هر دو Decision و Run هر دو status enumهای مشابهی دارند:
+
+# DecisionStatus
+DRAFT, FRAMING, AWAITING_INPUT, PLANNING, EVIDENCE, ANALYZING, REVIEWING, REVISING, SYNTHESIZING, VALIDATING, COMPLETED...
+
+# RunStatus  
+PENDING, RUNNING, COMPLETED, FAILED, CANCELLED
+
+__این خوب است!__ تفکیک صحیح انجام شده.
+
+1. __State Skip امکان‌پذیر نیست؟__ ✅
+
+StateMachine اجازه skip نمی‌دهد مگر transition تعریف شده باشد.
+
+1. __Rollback/Retry:__
+
+# TASK_TRANSITIONS includes:
+("FAILED", "PENDING"),  # But requires is_retry flag
+
+✅ Retry logic وجود دارد.
+
+1. __Concurrent Execution Risk:__ ⚠️
+
+هیچ locking mechanism وجود ندارد. اگر دو worker همزمان یک Task را update کنند، race condition پیش می‌آید.
+
+---
+
+## مرحله ۵ — API Contract Audit
+
+### Endpoints موجود
+
+#### Decisions Router
+
+| Method | Path                                 | Input                 | Output              | Auth | Tenant Check            |
+| ------ | ------------------------------------ | --------------------- | ------------------- | ---- | ----------------------- |
+| POST   | `/api/decisions/`                    | CreateDecisionRequest | DecisionResponse    | ❌    | ⚠️ Only verifies exists |
+| GET    | `/api/decisions/{id}`                | -                     | DecisionWithDetails | ❌    | ❌ NO CHECK              |
+| PUT    | `/api/decisions/{id}`                | DecisionUpdate        | DecisionResponse    | ❌    | ❌ NO CHECK              |
+| POST   | `/api/decisions/{id}/run`            | CreateRunRequest      | RunResponse         | ❌    | ❌ NO CHECK              |
+| GET    | `/api/decisions/{id}/runs`           | -                     | List[RunResponse]   | ❌    | ❌ NO CHECK              |
+| POST   | `/api/decisions/{id}/human-decision` | HumanDecisionRequest  | DecisionResponse    | ❌    | ❌ NO CHECK              |
+
+#### Runs Router
+
+| Method | Path                             | Input      | Output       | Tenant Check            |
+| ------ | -------------------------------- | ---------- | ------------ | ----------------------- |
+| GET    | `/api/runs/{id}`                 | -          | RunWithTasks | ❌                       |
+| PUT    | `/api/runs/{id}`                 | RunUpdate  | RunResponse  | ❌                       |
+| GET    | `/api/runs/{id}/tasks`           | -          | List[Task]   | ❌                       |
+| POST   | `/api/runs/{id}/tasks`           | TaskCreate | TaskResponse | ❌                       |
+| PUT    | `/api/runs/{id}/tasks/{task_id}` | TaskUpdate | TaskResponse | ⚠️ Checks run\_id match |
+
+#### Workflow Router
+
+| Method | Path                       | Purpose        | Security |
+| ------ | -------------------------- | -------------- | -------- |
+| POST   | `/api/runs/{id}/start`     | Start workflow | ❌        |
+| GET    | `/api/runs/{id}/progress`  | Get progress   | ❌        |
+| GET    | `/api/runs/{id}/history`   | Get events     | ❌        |
+| GET    | `/api/runs/{id}/full`      | Get everything | ❌        |
+| POST   | `/api/tasks/{id}/complete` | Complete task  | ❌        |
+| POST   | `/api/tasks/{id}/fail`     | Fail task      | ❌        |
+
+### مشکلات جدی API
+
+1. __No Authentication/Authorization:__ هیچ endpointی user را verify نمی‌کند.
+2. __IDOR Vulnerability:__ با تغییر ID در URL می‌توان به داده‌های tenant دیگر دسترسی پیدا کرد.
+3. __No Pagination:__ هیچ endpointی pagination ندارد.
+4. __Inconsistent Error Handling:__ بعضی جاها ValueError، بعضی جاها HTTPException.
+
+---
+
+## مرحله ۶ — Security Audit 🔴
+
+### Multi-tenancy Assessment
+
+__وضعیت فعلی: ❌ FAIL__
+
+```
+python
+```
+
+1
+
+2
+
+3
+
+4
+
+canvascanvas
+
+هیچ `tenant_id` filter وجود ندارد!
+
+__Attack Scenario:__
+
+1. Tenant A creates decision → gets ID=1
+2. Tenant B creates decision → gets ID=2
+3. Attacker (Tenant A) requests `/api/decisions/2` → __Success!__
+
+### Required Fix
+
+def get_current_user():  # Need this
+    pass
+
+@router.get("/{decision_id}")
+def get_decision(decision_id: int, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    decision = db.query(models.Decision).filter(
+        models.Decision.id == decision_id,
+        models.Decision.tenant_id == user.tenant_id  # ← Add this
+    ).first()
+
+### Authorization
+
+__وضعیت:__ ❌ وجود ندارد
+
+- هیچ role-based access control نیست
+- هیچ permission check نیست
+- هر کسی می‌تواند هر چیزی را update/delete کند
+
+### Audit Logging
+
+__وضعیت:__ ⚠️ Partial
+
+`AuditEvent` model وجود دارد ولی:
+
+- هیچ endpointی برای ثبت audit event وجود ندارد
+- هیچ automatic audit logging در APIها نیست
+
+---
+
+## مرحله ۷ — AI Architecture Audit 🔴
+
+### LLM Integration
+
+__وضعیت:__ ❌ وجود ندارد
+
+# config.py
+
+llm_provider: str = "openai"
+llm_api_key: Optional[str] = None
+
+فقط placeholder است.
+
+### Provider Abstraction
+
+__وجود ندارد.__ هیچ:
+
+- `LLMProvider` interface
+- `PromptTemplate` management
+- `StructuredOutput` parser
+- `TokenTracker`
+- `RetryLogic`
+- `FallbackPolicy`
+
+### Token/Cost Tracking
+
+__مدل داده آماده است:__
+
+class TaskAttempt(Base):
+    tokens_used = Column(Integer)
+    cost_cents = Column(Integer)
+
+__اما:__ هیچ logicی برای محاسبه و ذخیره این مقادیر وجود ندارد.
+
+---
+
+## مرحله ۸ — Council Architecture
+
+### آنچه وجود دارد ✅
+
+1. __Decision Model__ با fields کامل
+2. __Run Model__ با cost control
+3. __Task Model__ با retry support
+4. __Workflow State Machine__ با explicit transitions
+5. __WorkflowOrchestrator__ با task creation
+6. __WorkflowEvent__ برای audit trail
+
+### آنچه وجود ندارد ❌
+
+1. __Capability Registry__ - هیچ registry برای analytical capabilities نیست
+2. __Evidence Retrieval__ - هیچ logic retrieval وجود ندارد
+3. __Finding Creation__ - هیچ API برای ایجاد finding نیست
+4. __Conflict Detection__ - هیچ logic تشخیص conflict نیست
+5. __Cross-Review Logic__ - هیچ mechanism برای debate نیست
+6. __Synthesis Engine__ - هیچ logic برای synthesizing findings نیست
+7. __Recommendation Generation__ - هیچ logic تولید recommendation نیست
+
+### Vertical Gap Analysis
+
+User Question
+    ↓
+Decision Framing       ⚠️ Partial - فقط task type وجود دارد
+    ↓
+Planning               ✅ Initial planning task created
+    ↓
+Evidence Gathering     ❌ Missing
+    ↓
+Multiple Analysis      ❌ Missing - no capability execution
+    ↓
+Cross Review           ❌ Missing
+    ↓
+Conflict Detection     ❌ Missing
+    ↓
+Revision               ⚠️ State exists but no logic
+    ↓
+Synthesis              ❌ Missing
+    ↓
+Validation             ⚠️ State exists but no logic
+    ↓
+Recommendation         ❌ Missing
+    ↓
+Human Decision         ✅ Fields exist, API exists
+---
+
+## مرحله ۹ — Vertical Slice Test
+
+### سناریو: «آیا خرید دستگاه CNC توجیه اقتصادی دارد؟»
+
+__آیا سیستم فعلی می‌تواند end-to-end اجرا کند؟__
+
+| Step               | Can it work? | What's Missing                    |
+| ------------------ | ------------ | --------------------------------- |
+| 1. Create Decision | ✅ Yes        | Works via API                     |
+| 2. Create Run      | ✅ Yes        | Works via API                     |
+| 3. Plan            | ⚠️ Partial   | فقط planning task type وجود دارد  |
+| 4. Create Tasks    | ✅ Yes        | Orchestrator creates initial task |
+| 5. Execute Task    | ❌ No         | هیچ execution engine نیست         |
+| 6. Store Evidence  | ⚠️ Partial   | Model exists, no API              |
+| 7. Store Finding   | ⚠️ Partial   | Model exists, no API              |
+| 8. Create Conflict | ⚠️ Partial   | Model exists, no API              |
+| 9. Synthesis       | ❌ No         | هیچ logic نیست                    |
+| 10. Recommendation | ❌ No         | هیچ logic نیست                    |
+| 11. Human Decision | ✅ Yes        | API exists                        |
+| 12. Audit Trail    | ✅ Yes        | WorkflowEvent works               |
+
+### نقطه توقف
+
+__سیستم در Step 5 متوقف می‌شود.__
+
+Task ایجاد می‌شود ولی:
+
+- هیچ worker برای execute کردن task نیست
+- هیچ LLM integration نیست
+- هیچ capability execution نیست
+
+---
+
+## مرحله ۱۰ — Frontend Readiness
+
+### Frontend فعلی
+
+__وضعیت:__ ⚠️ Disconnected Simulation
+
+// src.js - شبیه‌سازی محلی
+function simulateCouncil() {
+    // Produces fake analysis
+    // No API calls
+}
+
+canvascanvas
+
+__مشکلات:__
+
+1. هیچ API call به backend نمی‌زند
+2. تمام منطق در browser است
+3. داده‌ها persist نمی‌شوند
+4. state machine در browser شبیه‌سازی می‌شود
+
+### حداقل UI موردنیاز
+
+برای MVP نیاز است به:
+
+1. __New Decision Form__ - ✅ Exists (composer)
+2. __Decision Workspace__ - ⚠️ Exists but fake
+3. __Run Progress__ - ❌ Needs connection to `/api/runs/{id}/progress`
+4. __Tasks Display__ - ❌ Needs connection to `/api/runs/{id}/tasks`
+5. __Evidence View__ - ❌ No UI component
+6. __Findings View__ - ❌ No UI component
+7. __Conflicts View__ - ❌ No UI component
+8. __Recommendation__ - ❌ No UI component
+9. __Human Decision__ - ⚠️ Exists but not connected
+10. __History/Audit__ - ❌ No UI component
+
+---
+
+## مرحله ۱۱ — MVP Scope
+
+### برای MVP حتماً لازم است (P0)
+
+1. ✅ Decision Model
+2. ✅ Run Model
+3. ✅ Task Model
+4. ✅ Workflow State Machine
+5. ✅ Basic APIs (CRUD)
+6. ❌ __Task Execution Engine__
+7. ❌ __LLM Gateway__
+8. ❌ __At least one real Capability__
+9. ❌ __Frontend ↔ Backend Connection__
+10. ✅ Human Decision API
+
+### برای MVP لازم نیست (P1/P2)
+
+1. ❌ Microservices
+2. ❌ Kubernetes
+3. ❌ Kafka/RabbitMQ
+4. ❌ Complex authentication
+5. ❌ Billing system
+6. ❌ Mobile app
+7. ❌ Dozens of capabilities
+8. ❌ Autonomous actions
+
+### فعلاً نباید ساخته شود
+
+1. ❌ Graph database
+2. ❌ Vector database infrastructure
+3. ❌ Agent marketplace
+4. ❌ Fine-tuning infrastructure
+5. ❌ Enterprise SSO
+
+---
+
+## مرحله ۱۲ — Gap Analysis Table
+
+| Component          | Current State      | Required               | Gap      | Priority |
+| ------------------ | ------------------ | ---------------------- | -------- | -------- |
+| __Decision__       | ✅ Model + API      | ✅ Same                 | None     | -        |
+| __Run__            | ✅ Model + API      | ✅ Same                 | None     | -        |
+| __Workflow SM__    | ✅ Implemented      | ✅ Same                 | None     | -        |
+| __Task Engine__    | ⚠️ Model only      | ❌ Execution            | High     | P0       |
+| __Evidence__       | ⚠️ Model only      | ❌ Retrieval + API      | High     | P0       |
+| __Analysis__       | ❌ Nothing          | ❌ Capabilities         | Critical | P0       |
+| __Conflict__       | ⚠️ Model only      | ❌ Detection logic      | Medium   | P1       |
+| __Synthesis__      | ❌ Nothing          | ❌ Engine               | Critical | P0       |
+| __Human Decision__ | ✅ Model + API      | ✅ Same                 | None     | -        |
+| __Audit__          | ✅ Model + Events   | ⚠️ More coverage       | Low      | P2       |
+| __Frontend__       | ⚠️ Fake simulation | ❌ Real API calls       | Critical | P0       |
+| __Security__       | ❌ Nothing          | ❌ Auth + Isolation     | Critical | P0       |
+| __LLM Gateway__    | ❌ Nothing          | ❌ Provider abstraction | Critical | P0       |
+
+---
+
+## مرحله ۱۳ — گزارش نهایی
+
+### وضعیت واقعی پروژه
+
+## 🟡 Strong Foundation but incomplete
+
+### 1. الان دقیقاً چه چیزی داریم؟
+
+✅ __Backend Skeleton کامل:__
+
+- FastAPI با 17 endpoint
+- 12 SQLAlchemy model با relationships
+- Alembic migrations
+- State machine با explicit transitions
+- Workflow orchestrator با task creation
+- History/event tracking
+- 13 test cases
+
+✅ __Frontend UI کامل:__
+
+- HTML/CSS/JS کامل
+- طراحی RTL فارسی
+- کامپوننت‌های شورا
+- انیمیشن‌ها
+
+### 2. چه چیزی واقعاً کار می‌کند؟
+
+✅ __کار می‌کند:__
+
+- Create Decision → PostgreSQL ذخیره می‌شود
+- Create Run → PostgreSQL ذخیره می‌شود
+- State transitions validate می‌شوند
+- Workflow events recorded می‌شوند
+- Tests pass می‌شوند (با SQLite)
+
+❌ __کار نمی‌کند:__
+
+- هیچ task واقعی execute نمی‌شود
+- هیچ LLM call وجود ندارد
+- هیچ evidence retrieval نیست
+- frontend به backend متصل نیست
+- security وجود ندارد
+
+### 3. چه چیزی فقط skeleton است؟
+
+- __Task Execution:__ فقط model وجود دارد، engine نیست
+- __Evidence:__ فقط model وجود دارد، retrieval نیست
+- __Capabilities:__ هیچ registry یا implementation نیست
+- __Synthesis:__ هیچ logic نیست
+- __LLM Gateway:__ فقط placeholder در config
+
+### 4. مهم‌ترین ۵ مشکل چیست؟
+
+1. 🔴 __Security - No Tenant Isolation:__ هر tenant می‌تواند به داده‌های tenant دیگر دسترسی پیدا کند (IDOR vulnerability)
+2. 🔴 __No Task Execution:__ Taskها created می‌شوند ولی هیچ‌گاه executed نمی‌شوند
+3. 🔴 __No LLM Integration:__ هیچ pathway برای AI reasoning وجود ندارد
+4. 🔴 __Frontend Disconnected:__ UI کاملاً از backend جدا است و داده‌های fake تولید می‌کند
+5. 🟠 __No Capability System:__ هیچ mechanism برای defining/running analytical capabilities نیست
+
+### 5. بعد از این بررسی دقیقاً چه چیزی باید ساخته شود؟
+
+__به ترتیب اولویت:__
+
+1. __Security First:__ اضافه کردن tenant isolation به همه APIها
+2. __Task Executor:__ ساده‌ترین possible execution mechanism
+3. __One Real Capability:__ مثلاً "decision\_framing" که واقعاً کار کند
+4. __Frontend Connection:__ اتصال UI به APIهای واقعی
+5. __LLM Gateway:__ حداقل abstraction برای OpenAI
+
+### 6. چه چیزهایی را نباید فعلاً بسازیم؟
+
+- ❌ Microservices
+- ❌ Distributed queues
+- ❌ Complex auth platform
+- ❌ Multiple capabilities
+- ❌ RAG infrastructure
+- ❌ BOLUT integration (تا وقتی core کار نکند)
+
+### 7. آیا می‌توانیم همین نسخه را به یک مشتری برای Demo نشان دهیم؟
+
+## ❌ خیر
+
+__دلایل:__
+
+1. Security vulnerability جدی وجود دارد
+2. هیچ AI واقعی کار نمی‌کند
+3. Frontend داده‌های fake نشان می‌دهد
+4. هیچ تصمیم واقعی تولید نمی‌شود
+
+### 8. حداقل Vertical Slice موردنیاز چیست؟
+
+User submits question
+    ↓
+POST /api/decisions/  → Decision created in DB
+    ↓
+POST /api/decisions/{id}/run  → Run created
+    ↓
+POST /api/runs/{id}/start  → Planning task created
+    ↓
+[NEW] POST /api/tasks/{id}/execute  → LLM called, output stored
+    ↓
+Task marked as COMPLETED
+    ↓
+Recommendation stored in DecisionRevision
+    ↓
+GET /api/runs/{id}/progress  → UI shows real state
+    ↓
+User makes human decision
+
+canvascanvas
+
+__حداقل نیازها:__
+
+1. Security fix (tenant isolation)
+2. One working capability (decision framing)
+3. LLM gateway with one provider
+4. Frontend API integration
+5. Real recommendation storage
+
+---
+
+## 🗺️ Roadmap سه مرحله‌ای
+
+### NOW (هفته ۱-۲)
+
+1. ✅ Fix tenant isolation در همه APIها
+2. ✅ Add basic authentication (simple API key)
+3. ✅ Implement LLM Gateway abstraction
+4. ✅ Create first real capability (decision\_framing)
+5. ✅ Connect frontend to real APIs
+
+__Outcome:__ یک تصمیم واقعی با AI تحلیل می‌شود
+
+### NEXT (هفته ۳-۴)
+
+1. Add 2-3 more capabilities (financial, operational)
+2. Implement structured cross-review
+3. Add conflict detection logic
+4. Build synthesis engine
+5. Improve frontend UX
+
+__Outcome:__ شورای کامل با چندین دیدگاه مستقل
+
+### LATER (ماه ۲+)
+
+1. Knowledge interface
+2. BOLUT adapter
+3. Advanced debate features
+4. Cost optimization
+5. Production hardening
+
+---
+
+## حکم نهایی
+
+__پروژه SHORA دارای یک foundation فنی قوی است اما هنوز یک محصول قابل demo نیست.__
+
+__نقاط قوت:__
+
+- معماری backend صحیح و قابل توسعه
+- مدل داده کامل برای use caseهای پیچیده
+- State machine صریح و well-defined
+- Workflow orchestration پایه
+
+__نقاط ضعف بحرانی:__
+
+- امنیت اصلاً implement نشده
+- هیچ AI واقعی کار نمی‌کند
+- Frontend کاملاً disconnected است
+- هیچ capability execution وجود ندارد
+
+__توصیه:__ قبل از هر feature جدید، ابتدا __security__ و __یک capability واقعی__ را implement کنید تا بتوانید یک vertical slice end-to-end demo دهید.

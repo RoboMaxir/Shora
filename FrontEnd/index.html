@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
-<title>SIMORGH — شورای مدیریت هوشمند</title>
+<title>SHORA — شورای هوشمند تصمیم‌گیری</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -14,16 +14,14 @@
 
 <!-- ═══ ریل ناوبری ═══ -->
 <nav class="rail" aria-label="ناوبری اصلی">
-  <div class="rlogo" title="SIMORGH">
+  <div class="rlogo" title="SHORA">
     <svg viewBox="0 0 24 24" fill="none"><path d="M3 15 C6 8 10 5 12 3 C14 5 18 8 21 15" stroke="var(--acc)" stroke-width="1.8" stroke-linecap="round"/><path d="M6.5 15 C9 11 12 9.5 12 9.5 C12 9.5 15 11 17.5 15" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M12 3V21" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity=".45"/></svg>
   </div>
-  <button class="rbtn" data-nav="new" title="جلسه جدید" aria-label="جلسه جدید"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
-  <button class="rbtn" data-nav="sessions" title="جلسات اخیر" aria-label="جلسات اخیر"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h9"/></svg></button>
-  <button class="rbtn" data-nav="files" title="فایل‌ها" aria-label="فایل‌ها"><svg viewBox="0 0 24 24"><path d="M7 3h8l4 4v14H7z"/><path d="M15 3v4h4"/></svg></button>
-  <button class="rbtn" data-nav="decisions" title="تصمیم‌های ثبت‌شده" aria-label="تصمیم‌های ثبت‌شده"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
-  <button class="rbtn" data-nav="history" title="تاریخچه" aria-label="تاریخچه"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></button>
+  <button class="rbtn" data-view="dashboard" title="داشبورد" aria-label="داشبورد"><svg viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg></button>
+  <button class="rbtn" data-view="decisions" title="تصمیم‌ها" aria-label="تصمیم‌ها"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
+  <button class="rbtn" data-view="runs" title="اجراها" aria-label="اجراها"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></button>
   <span class="rsp"></span>
-  <button class="rbtn" data-nav="settings" title="تنظیمات" aria-label="تنظیمات"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8"/></svg></button>
+  <button class="rbtn" data-action="new-decision" title="تصمیم جدید" aria-label="تصمیم جدید"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
 </nav>
 
 <!-- ═══ پوسته اصلی ═══ -->
@@ -32,83 +30,291 @@
   <header class="hdr">
     <button class="hib menu" id="hmenu" title="منو" aria-label="باز کردن منو"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
     <div class="htopic">
-      <small id="hKicker">نشست #۱۲ · شورای مدیریت SIMORGH</small>
-      <h1 id="topicTxt">—</h1>
+      <small id="hKicker">SHORA · شورای هوشمند تصمیم‌گیری</small>
+      <h1 id="topicTxt">داشبورد</h1>
     </div>
     <div class="hacts">
-      <span class="hbadge" id="stateBadge" role="status" aria-live="polite"><span class="dot"></span><span id="stateTxt">در انتظار پرسش</span></span>
-      <button class="hib" id="pauseBtn" title="توقف / ادامه" aria-label="توقف یا ادامه شورا"><svg viewBox="0 0 24 24" id="pauseIco"><path d="M9 5v14M15 5v14"/></svg></button>
-      <button class="hib" id="restartBtn" title="اجرای مجدد شورا" aria-label="اجرای مجدد شورا"><svg viewBox="0 0 24 24"><path d="M4 5v5h5"/><path d="M4.6 10a8 8 0 102-5.3"/></svg></button>
-      <button class="hib" id="logBtn" title="صورت جلسه" aria-label="صورت جلسه"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></button>
+      <span class="hbadge" id="stateBadge" role="status" aria-live="polite" hidden><span class="dot"></span><span id="stateTxt">در حال اجرا</span></span>
     </div>
   </header>
 
-  <main class="stage" id="stage" aria-label="میز شورا">
-    <div class="stageMain">
-      <div class="ceochip" id="ceoChip" hidden>
-        <span class="cc-av">مدیرعامل</span>
-        <p id="ceoChipTxt"></p>
+  <main class="stage" id="stage" aria-label="محیط کار">
+    
+    <!-- ═══ داشبورد ═══ -->
+    <div id="view-dashboard" class="view active">
+      <div class="dash-hero">
+        <h2>به SHORA خوش آمدید</h2>
+        <p>تصمیم‌های استراتژیک خود را با تحلیل شورای هوشمند بررسی کنید</p>
+        <button class="btn-primary" id="newDecisionHero">
+          <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          ایجاد تصمیم جدید
+        </button>
       </div>
-      <div class="agents" id="agents"></div>
+      
+      <div class="dash-sections">
+        <section class="dash-card">
+          <header>
+            <h3>تصمیم‌های اخیر</h3>
+            <a href="#" data-view="decisions">مشاهده همه</a>
+          </header>
+          <div class="dash-list" id="recentDecisions">
+            <div class="empty-state">هیچ تصمیمی ثبت نشده است</div>
+          </div>
+        </section>
+        
+        <section class="dash-card">
+          <header>
+            <h3>اجراهای فعال</h3>
+          </header>
+          <div class="dash-list" id="activeRuns">
+            <div class="empty-state">هیچ اجرای فعالی وجود ندارد</div>
+          </div>
+        </section>
+      </div>
     </div>
 
-    <aside class="sideCol">
-      <section class="conclusion" id="concl" aria-live="polite">
-        <div class="cc-head">
-          <svg viewBox="0 0 24 24"><path d="M12 3l2.2 4.8L19 9l-3.5 3.4.9 5L12 14.9 7.6 17.4l.9-5L5 9l4.8-1.2z"/></svg>
-          <b>جمع‌بندی شورا</b>
-          <span class="cc-live" id="ccLive" hidden><i></i>به‌روزرسانی زنده</span>
-        </div>
-        <p class="cc-txt" id="ccTxt">پس از تحلیل اعضا، جمع‌بندی شورا اینجا نمایش داده می‌شود.</p>
-        <div class="cc-stats" id="ccStats" hidden>
-          <div class="cc-stat"><span class="lbl">هم‌راستایی شواهد</span><span class="dots5" id="ccDots"><i></i><i></i><i></i><i></i><i></i></span><b id="ccAlign">۰/۵</b></div>
-          <div class="cc-stat"><span class="lbl">اطمینان</span><span class="cbar"><i id="ccBar"></i></span><b id="ccConf">۰٪</b></div>
-        </div>
-      </section>
+    <!-- ═══ لیست تصمیم‌ها ═══ -->
+    <div id="view-decisions" class="view">
+      <header class="view-header">
+        <h2>تصمیم‌ها</h2>
+        <button class="btn-primary" id="newDecisionBtn">
+          <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          تصمیم جدید
+        </button>
+      </header>
+      <div class="list-container" id="decisionsList">
+        <div class="empty-state">هیچ تصمیمی وجود ندارد</div>
+      </div>
+    </div>
 
-      <div class="chalDock" id="chalDock"></div>
-    </aside>
+    <!-- ═══ جزئیات تصمیم ═══ -->
+    <div id="view-decision-detail" class="view">
+      <header class="view-header">
+        <button class="btn-back" onclick="app.navigate('decisions')">
+          <svg viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+          بازگشت
+        </button>
+        <h2 id="decisionTitle">عنوان تصمیم</h2>
+        <button class="btn-primary" id="startCouncilBtn">
+          <svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+          اجرای شورا
+        </button>
+      </header>
+      
+      <div class="decision-content">
+        <section class="decision-info">
+          <h3>سؤال تصمیم</h3>
+          <p id="decisionQuestion">—</p>
+          
+          <h3>اهداف</h3>
+          <ul id="decisionObjectives"></ul>
+          
+          <h3>محدودیت‌ها</h3>
+          <ul id="decisionConstraints"></ul>
+          
+          <h3>زمینه</h3>
+          <p id="decisionContext">—</p>
+        </section>
+        
+        <section class="runs-section">
+          <h3>اجراهای این تصمیم</h3>
+          <div class="runs-list" id="decisionRuns"></div>
+        </section>
+      </div>
+    </div>
 
-    <!-- جریان بحث — فقط موبایل -->
-    <section class="mflow" id="mflow" aria-label="روند جلسه">
-      <h2>روند جلسه</h2>
-      <div class="loglist" id="logMobile"></div>
-    </section>
+    <!-- ═══ اجرای شورا (نمایش زنده) ═══ -->
+    <div id="view-run" class="view">
+      <header class="view-header">
+        <button class="btn-back" onclick="app.navigate('decisions')">
+          <svg viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+          بازگشت
+        </button>
+        <h2 id="runTitle">در حال اجرای شورا</h2>
+        <span class="run-status" id="runStatus">در حال پردازش</span>
+      </header>
+      
+      <div class="council-progress">
+        <div class="progress-steps">
+          <div class="step" data-step="context">
+            <span class="step-icon">📋</span>
+            <span class="step-label">زمینه و شواهد</span>
+          </div>
+          <div class="step" data-step="strategy">
+            <span class="step-icon">🎯</span>
+            <span class="step-label">استراتژی</span>
+          </div>
+          <div class="step" data-step="finance">
+            <span class="step-icon">💰</span>
+            <span class="step-label">مالی</span>
+          </div>
+          <div class="step" data-step="market">
+            <span class="step-icon">📊</span>
+            <span class="step-label">بازار</span>
+          </div>
+          <div class="step" data-step="review">
+            <span class="step-icon">⚖️</span>
+            <span class="step-label">بررسی متقابل</span>
+          </div>
+          <div class="step" data-step="synthesis">
+            <span class="step-icon">🧩</span>
+            <span class="step-label">سنتز</span>
+          </div>
+          <div class="step" data-step="dossier">
+            <span class="step-icon">📁</span>
+            <span class="step-label">پوشه تصمیم</span>
+          </div>
+        </div>
+        
+        <div class="agents-grid" id="agentsGrid">
+          <!-- Agent cards will be inserted here -->
+        </div>
+        
+        <div class="conflicts-section" id="conflictsSection" hidden>
+          <h3>تضادهای شناسایی‌شده</h3>
+          <div class="conflicts-list" id="conflictsList"></div>
+        </div>
+        
+        <div class="synthesis-section" id="synthesisSection" hidden>
+          <h3>سنتز تحلیل‌ها</h3>
+          <div class="synthesis-content" id="synthesisContent"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ پوشه تصمیم (Dossier) ═══ -->
+    <div id="view-dossier" class="view">
+      <header class="view-header">
+        <button class="btn-back" onclick="app.navigate('decisions')">
+          <svg viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+          بازگشت
+        </button>
+        <h2>پوشه تصمیم</h2>
+      </header>
+      
+      <div class="dossier-container" id="dossierContent">
+        <section class="dossier-section">
+          <h3>خلاصه اجرایی</h3>
+          <p id="dossierExecutiveSummary">—</p>
+        </section>
+        
+        <section class="dossier-section">
+          <h3>سؤال تصمیم</h3>
+          <p id="dossierDecisionQuestion">—</p>
+        </section>
+        
+        <section class="dossier-section">
+          <h3>یافته‌های کلیدی</h3>
+          <ul id="dossierKeyFindings"></ul>
+        </section>
+        
+        <section class="dossier-section">
+          <h3>تحلیل استراتژی</h3>
+          <div id="dossierStrategyAnalysis"></div>
+        </section>
+        
+        <section class="dossier-section">
+          <h3>تحلیل مالی</h3>
+          <div id="dossierFinanceAnalysis"></div>
+        </section>
+        
+        <section class="dossier-section">
+          <h3>تحلیل بازار</h3>
+          <div id="dossierMarketAnalysis"></div>
+        </section>
+        
+        <section class="dossier-section" id="dossierConflictsSection" hidden>
+          <h3>تضادها</h3>
+          <div id="dossierConflicts"></div>
+        </section>
+        
+        <section class="dossier-section">
+          <h3>ریسک‌ها</h3>
+          <ul id="dossierRisks"></ul>
+        </section>
+        
+        <section class="dossier-section">
+          <h3>ناشناخته‌ها</h3>
+          <ul id="dossierUnknowns"></ul>
+        </section>
+        
+        <section class="dossier-section">
+          <h3>گام‌های بعدی توصیه‌شده</h3>
+          <ol id="dossierNextSteps"></ol>
+        </section>
+        
+        <section class="dossier-section human-decision-section">
+          <h3>تصمیم نهایی شما</h3>
+          <p class="decision-note">شورا تحلیل و توصیه ارائه می‌دهد، اما تصمیم نهایی با شماست</p>
+          <div class="decision-options">
+            <button class="btn-decision btn-approve" data-decision="APPROVED">
+              <svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+              تأیید
+            </button>
+            <button class="btn-decision btn-reject" data-decision="REJECTED">
+              <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+              رد
+            </button>
+            <button class="btn-decision btn-defer" data-decision="DEFERRED">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
+              تعویق
+            </button>
+            <button class="btn-decision btn-revision" data-decision="REQUESTED_REVISION">
+              <svg viewBox="0 0 24 24"><path d="M4 5v5h5"/><path d="M4.6 10a8 8 0 102-5.3"/></svg>
+              درخواست بازنگری
+            </button>
+          </div>
+          <textarea id="humanDecisionReason" placeholder="دلیل تصمیم خود را بنویسید (اختیاری)"></textarea>
+          <button class="btn-primary" id="submitHumanDecision">ثبت تصمیم نهایی</button>
+        </section>
+      </div>
+    </div>
+
+    <!-- ═══ فرم ایجاد تصمیم ═══ -->
+    <div id="view-new-decision" class="view">
+      <header class="view-header">
+        <button class="btn-back" onclick="app.navigate('dashboard')">
+          <svg viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+          بازگشت
+        </button>
+        <h2>ایجاد تصمیم جدید</h2>
+      </header>
+      
+      <form class="decision-form" id="newDecisionForm">
+        <div class="form-group">
+          <label for="decisionTitle">عنوان تصمیم</label>
+          <input type="text" id="decisionTitle" required placeholder="مثال: ورود به بازار جدید">
+        </div>
+        
+        <div class="form-group">
+          <label for="decisionQuestion">سؤال تصمیم</label>
+          <textarea id="decisionQuestion" required rows="3" placeholder="مثال: آیا باید محصول X را وارد بازار Y کنیم؟"></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="decisionObjectives">اهداف (هر هدف در یک خط)</label>
+          <textarea id="decisionObjectives" rows="4" placeholder="افزایش درآمد&#10;گسترش سهم بازار&#10;تنوع‌بخشی به محصولات"></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="decisionConstraints">محدودیت‌ها (هر محدودیت در یک خط)</label>
+          <textarea id="decisionConstraints" rows="4" placeholder="بودجه محدود&#10;نیروی انسانی&#10;زمان راه‌اندازی"></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="decisionContext">زمینه و توضیحات اضافی</label>
+          <textarea id="decisionContext" rows="6" placeholder="توضیحات بیشتر درباره تصمیم، پیشینه، و هر اطلاعات مرتبط دیگر..."></textarea>
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" onclick="app.navigate('dashboard')">انصراف</button>
+          <button type="submit" class="btn-primary">ایجاد تصمیم</button>
+        </div>
+      </form>
+    </div>
+
   </main>
 
-  <footer class="composer">
-    <div class="cwrap">
-      <div class="chips" id="chips" hidden></div>
-      <div class="cbox">
-        <div class="popwrap">
-          <button class="cbtn plus" id="plusBtn" aria-label="افزودن پیوست" aria-haspopup="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
-          <div class="pop up start" id="plusMenu" hidden>
-            <button data-add="case"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="M8 4v16M11 9h6M11 13h6"/></svg>ورود پرونده تصمیم</button>
-            <button data-add="file"><svg viewBox="0 0 24 24"><path d="M7 3h8l4 4v14H7z"/><path d="M15 3v4h4"/></svg>افزودن فایل</button>
-            <button data-add="doc"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M9 10h6M9 14h6M9 18h4"/></svg>افزودن سند</button>
-            <button data-add="data"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="2.6"/><path d="M5 6v12c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6V6"/></svg>افزودن داده</button>
-            <button data-add="ctx"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 8.5v7M8.5 12h7"/></svg>افزودن زمینه</button>
-          </div>
-        </div>
-        <input id="ceoInput" type="text" placeholder="نظر یا پرسش خود را برای شورا بنویسید…" autocomplete="off" aria-label="پیام به شورا">
-        <div class="popwrap">
-          <button class="cbtn think" id="thinkBtn" aria-haspopup="true">
-            <svg viewBox="0 0 24 24"><path d="M9 21h6M10 17.5h4M12 3.5a5.5 5.5 0 013.4 9.8c-.6.5-.9 1.1-.9 1.9h-5c0-.8-.3-1.4-.9-1.9A5.5 5.5 0 0112 3.5z"/></svg>
-            <span id="thinkLbl">تفکر · ۳×</span>
-          </button>
-          <div class="pop up end wmenu" id="thinkMenu" hidden>
-            <div class="ptitle">سطح تفکر</div>
-            <button data-lv="1"><b>Low</b><span>۱×</span></button>
-            <button data-lv="3" class="on"><b>Medium</b><span>۳×</span></button>
-            <button data-lv="5"><b>High</b><span>۵×</span></button>
-            <button data-lv="10"><b>Ultra</b><span>۱۰×</span></button>
-          </div>
-        </div>
-        <button class="send" id="sendBtn" aria-label="ارسال به شورا" disabled><svg viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
-      </div>
-      <p class="hint">دموی تعاملی · تحلیل‌ها به‌صورت محلی شبیه‌سازی می‌شوند و تصمیم نهایی همیشه با شماست.</p>
-    </div>
-  </footer>
 </div>
 
 <!-- ═══ پرده و کشوها ═══ -->
@@ -117,103 +323,21 @@
 <aside class="drawer navd" id="navDrawer" aria-hidden="true">
   <header>
     <span class="dlogo"><svg viewBox="0 0 24 24" fill="none"><path d="M3 15 C6 8 10 5 12 3 C14 5 18 8 21 15" stroke="var(--acc)" stroke-width="1.8" stroke-linecap="round"/><path d="M6.5 15 C9 11 12 9.5 12 9.5 C12 9.5 15 11 17.5 15" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
-    <div><b>SIMORGH</b><small>شورای مدیریت هوشمند · powered by OrgOS</small></div>
+    <div><b>SHORA</b><small>شورای هوشمند تصمیم‌گیری</small></div>
     <button class="x" data-closedrawer aria-label="بستن">✕</button>
   </header>
-  <button class="dexit" id="exitBtn">
-    <svg viewBox="0 0 24 24"><path d="M14 4H7v16h7"/><path d="M10 12h11M18 8.5L21.5 12 18 15.5"/></svg>
-    <span>خروج از جلسه<small>ترک نشست فعلی شورا</small></span>
-  </button>
-  <button class="ditem" id="newSessionBtn"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>جلسه جدید</button>
-
-  <div class="dacc" data-acc="sessions">
-    <button class="ditem acc"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h9"/></svg>جلسات اخیر<svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
-    <div class="dpanel"><div class="dlist" id="listSessions"></div></div>
-  </div>
-  <div class="dacc" data-acc="files">
-    <button class="ditem acc"><svg viewBox="0 0 24 24"><path d="M7 3h8l4 4v14H7z"/><path d="M15 3v4h4"/></svg>فایل‌ها<svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
-    <div class="dpanel"><div class="dlist" id="listFiles"></div></div>
-  </div>
-  <div class="dacc" data-acc="decisions">
-    <button class="ditem acc"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>تصمیم‌های ثبت‌شده<svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
-    <div class="dpanel"><div class="dlist" id="listDecisions"></div></div>
-  </div>
-  <div class="dacc" data-acc="history">
-    <button class="ditem acc"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>تاریخچه<svg class="chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
-    <div class="dpanel"><div class="dlist" id="listHistory"></div></div>
-  </div>
-  <button class="ditem" id="settingsBtn"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8"/></svg>تنظیمات</button>
+  
+  <button class="ditem" data-view="dashboard"><svg viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg>داشبورد</button>
+  <button class="ditem" data-view="decisions"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>تصمیم‌ها</button>
+  <button class="ditem" data-view="runs"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>اجراها</button>
+  
+  <div class="dsep"></div>
+  
+  <button class="ditem" data-action="new-decision"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>تصمیم جدید</button>
 </aside>
-
-<aside class="drawer logd" id="logDrawer" aria-hidden="true">
-  <header><b>صورت جلسه</b><button class="x" data-closedrawer aria-label="بستن">✕</button></header>
-  <div class="loglist tall" id="logDesk"></div>
-</aside>
-
-<!-- ═══ پنل جزئیات عضو ═══ -->
-<div class="apscrim" id="apScrim" hidden></div>
-<aside class="apanel" id="apanel" hidden aria-hidden="true"></aside>
-
-<!-- ═══ گزارش و پیشنهاد نهایی شورا ═══ -->
-<aside class="frec" id="frec" hidden aria-label="گزارش و پیشنهاد شورا">
-  <header>
-    <span class="fi"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="M8 4v16M11 9h6M11 13h6"/></svg></span>
-    <div><b>گزارش و پیشنهاد شورا</b><small id="frSub">نشست #۱۲</small></div>
-    <button class="x" id="frecMin" aria-label="جمع کردن">—</button>
-  </header>
-  <div class="fr-body">
-    <div class="fr-sec">گزارش تحلیل‌ها</div>
-    <div class="fr-report" id="frReport"></div>
-    <div class="fr-sec">پیشنهاد شورا</div>
-    <p class="fr-rec" id="frRec"></p>
-    <div class="fr-conf"><span>اطمینان</span><span class="cbar"><i id="frBar"></i></span><b id="frConf">۰٪</b></div>
-    <ol class="fr-acts" id="frActs"></ol>
-  </div>
-  <button class="fr-cta" id="frCta">اعمال در OrgOS<svg viewBox="0 0 24 24"><path d="M14 4H7v16h7"/><path d="M10 12h11M18 8.5L21.5 12 18 15.5"/></svg></button>
-</aside>
-<button class="frecpill" id="frecPill" hidden><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="M8 4v16M11 9h6M11 13h6"/></svg>گزارش و پیشنهاد شورا</button>
-
-<!-- ═══ مودال‌ها ═══ -->
-<div class="overlay" id="ovTopic" aria-hidden="true">
-  <div class="modal">
-    <h3>موضوع جدید برای شورا</h3>
-    <p class="muted">پرسش یا تصمیم موردنظر را بنویسید؛ پنج عضو شورا آن را هم‌زمان از زاویه تخصص خود ارزیابی می‌کنند.</p>
-    <input class="tin" id="topicInput" placeholder="مثال: ورود به بازار صادراتی منطقه را چگونه آغاز کنیم؟">
-    <div class="mrow"><button class="btn g" id="topicGo">اجرای شورا</button><button class="btn" data-closeov>انصراف</button></div>
-  </div>
-</div>
-
-<div class="overlay" id="ovExit" aria-hidden="true">
-  <div class="modal">
-    <h3>خروج از جلسه</h3>
-    <p class="muted">در حال ترک نشست فعال هستید. تحلیل‌های انجام‌شده در تاریخچه ذخیره می‌شود.</p>
-    <div class="mrow"><button class="btn r" id="exitYes">خروج از جلسه</button><button class="btn" data-closeov>ادامه نشست</button></div>
-  </div>
-</div>
-
-<div class="overlay" id="ovGen" aria-hidden="true">
-  <div class="modal wide"><h3 id="genTitle"></h3><div id="genBody"></div>
-    <div class="mrow"><button class="btn" data-closeov>بستن</button></div>
-  </div>
-</div>
-
-<div class="exitscr" id="exitScr" hidden>
-  <div class="exCard">
-    <span class="exLogo"><svg viewBox="0 0 24 24" fill="none"><path d="M3 15 C6 8 10 5 12 3 C14 5 18 8 21 15" stroke="var(--acc)" stroke-width="1.7" stroke-linecap="round"/><path d="M6.5 15 C9 11 12 9.5 12 9.5 C12 9.5 15 11 17.5 15" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span>
-    <h2>از جلسه خارج شدید</h2>
-    <p>نشست #۱۲ ذخیره شد و در تاریخچه جلسات در دسترس است.</p>
-    <div class="exRow"><button class="btn g" id="backBtn">بازگشت به جلسه</button><button class="btn" id="minBtn">مشاهده صورت‌جلسه</button></div>
-  </div>
-</div>
-
-<!-- پاپ‌آپ چالش -->
-<div class="chalpop" id="chalPop" hidden></div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastTxt"></span></div>
-<input type="file" id="fileInput" hidden multiple>
 
-<script src="gsap.min.js"></script>
-<script src="chart.umd.min.js"></script>
-<script src="src.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

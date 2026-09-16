@@ -2,9 +2,10 @@
 API router for Decisions.
 
 Endpoints:
-- POST   /api/decisions          Create a new decision
-- GET    /api/decisions/{id}     Get a decision by ID
-- PUT    /api/decisions/{id}     Update a decision
+- GET    /api/decisions/       List all decisions
+- POST   /api/decisions/       Create a new decision
+- GET    /api/decisions/{id}   Get a decision by ID
+- PUT    /api/decisions/{id}   Update a decision
 - POST   /api/decisions/{id}/run Create a new run for a decision
 """
 from typing import List, Optional
@@ -18,6 +19,15 @@ from app.schemas import schemas
 
 
 router = APIRouter()
+
+
+@router.get("/", response_model=List[schemas.DecisionResponse])
+def list_decisions(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    """
+    List all Decisions.
+    """
+    decisions = db.query(models.Decision).offset(skip).limit(limit).all()
+    return decisions
 
 
 @router.post("/", response_model=schemas.DecisionResponse, status_code=status.HTTP_201_CREATED)

@@ -30,7 +30,7 @@ def list_runs(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return runs
 
 
-@router.get("/{run_id}", response_model=schemas.RunWithDetailsResponse)
+@router.get("/{run_id}", response_model=schemas.RunWithTasksResponse)
 def get_run(run_id: int, db: Session = Depends(get_db)):
     """
     Get a Run by ID with its tasks.

@@ -22,10 +22,10 @@ wheels/
 *.egg
 
 # Environment
-.venv/
-venv/
-env/
-ENV/
+.env
+.test*
+test.db
+test_council.db
 
 # IDE
 .vscode/
@@ -41,6 +41,4 @@ ENV/
 htmlcov/
 .coverage.*
 .coverage.xml
-*.cover
-coverage.xml
 ```

@@ -17,6 +17,7 @@ from sqlalchemy.orm import sessionmaker
 from app.main import app
 from app.db.database import Base, get_db
 from app.models import models
+from app.models import WorkflowEvent
 from app.workflow.state_machine import state_machine, DecisionStatus, RunStatus, TaskStatus
 
 
@@ -303,7 +304,7 @@ class TestRunAPI:
         db_session.commit()
         
         # Add an event
-        event = models.WorkflowEvent(
+        event = WorkflowEvent(
             run_id=run.id,
             decision_id=decision.id,
             event_type="RUN_STARTED",

@@ -113,7 +113,7 @@ class Decision(Base):
     # Relationships
     tenant = relationship("Tenant", back_populates="decisions")
     creator = relationship("User", back_populates="decisions")
-    revisions = relationship("DecisionRevision", back_populates="decision", cascade="all, delete-orphan", foreign_keys=[decision_id])
+    revisions = relationship("DecisionRevision", back_populates="decision", cascade="all, delete-orphan", foreign_keys="DecisionRevision.decision_id")
     runs = relationship("Run", back_populates="decision", cascade="all, delete-orphan", foreign_keys="Run.decision_id")
     events = relationship(history.WorkflowEvent, back_populates="decision", foreign_keys="WorkflowEvent.decision_id")
 
@@ -149,7 +149,7 @@ class DecisionRevision(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     
     # Relationships
-    decision = relationship("Decision", back_populates="revisions")
+    decision = relationship("Decision", back_populates="revisions", foreign_keys=[decision_id])
 
 
 class RunStatus(str, enum.Enum):

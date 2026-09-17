@@ -22,6 +22,122 @@ from app.platform import platform
 logger = logging.getLogger(__name__)
 
 
+# ═══ Agent Registry ═══
+
+class AgentDefinition:
+    """Definition of an agent in the council"""
+    def __init__(self, name: str, role: str, system_instructions: str, 
+                 required_inputs: List[str], output_schema: Dict):
+        self.name = name
+        self.role = role
+        self.system_instructions = system_instructions
+        self.required_inputs = required_inputs
+        self.output_schema = output_schema
+
+
+AGENT_REGISTRY = {
+    "strategy": AgentDefinition(
+        name="strategy",
+        role="استراتژی",
+        system_instructions="You are a strategic analysis expert. Analyze the decision from a strategic perspective.",
+        required_inputs=["decision_description", "objectives", "constraints"],
+        output_schema={"summary": str, "claims": list, "assumptions": list, "risks": list, 
+                       "opportunities": list, "recommendations": list, "confidence": float}
+    ),
+    "finance": AgentDefinition(
+        name="finance",
+        role="مالی",
+        system_instructions="You are a financial analysis expert. Analyze the decision from a financial perspective.",
+        required_inputs=["decision_description", "objectives", "constraints"],
+        output_schema={"summary": str, "claims": list, "assumptions": list, "risks": list,
+                       "opportunities": list, "recommendations": list, "confidence": float}
+    ),
+    "market": AgentDefinition(
+        name="market",
+        role="بازار",
+        system_instructions="You are a market analysis expert. Analyze the decision from a market perspective.",
+        required_inputs=["decision_description", "objectives", "constraints"],
+        output_schema={"summary": str, "claims": list, "assumptions": list, "risks": list,
+                       "opportunities": list, "recommendations": list, "confidence": float}
+    ),
+}
+
+
+async def execute_agent(db: Session, task, agent, decision, evidence: List) -> tuple:
+    """Execute a single agent and return (success, output, tokens)"""
+    try:
+        # Mock execution for testing
+        mock_result = {
+            "summary": f"Analysis by {agent.name}",
+            "claims": ["Claim 1", "Claim 2"],
+            "assumptions": ["Assumption 1"],
+            "risks": ["Risk 1"],
+            "recommendations": ["Recommendation 1"],
+            "confidence": 0.75
+        }
+        return True, mock_result, 100
+    except Exception as e:
+        return False, {"error": str(e)}, 0
+
+
+def detect_conflicts(db: Session, decision, agent_outputs: Dict) -> List[Dict]:
+    """Detect conflicts between agent outputs"""
+    conflicts = []
+    
+    strategy = agent_outputs.get('strategy', {})
+    finance = agent_outputs.get('finance', {})
+    
+    # Simple conflict detection on assumptions
+    strategy_assumptions = set(strategy.get('assumptions', []))
+    finance_assumptions = set(finance.get('assumptions', []))
+    
+    if strategy_assumptions != finance_assumptions:
+        conflicts.append({
+            "topic": "Assumption Conflict",
+            "agents": ["strategy", "finance"],
+            "conflict_type": "assumptive",
+            "description": "Different assumptions detected",
+            "severity": "medium"
+        })
+    
+    return conflicts
+
+
+async def synthesize_analysis(db: Session, decision, agent_outputs: Dict, 
+                              conflicts: List, evidence: List) -> Dict:
+    """Synthesize all agent analyses into a unified recommendation"""
+    all_findings = []
+    all_recommendations = []
+    
+    for agent_data in agent_outputs.values():
+        if 'summary' in agent_data:
+            all_findings.append(agent_data['summary'])
+        if 'recommendations' in agent_data:
+            all_recommendations.extend(agent_data.get('recommendations', []))
+    
+    return {
+        "executive_summary": "Synthesized analysis based on all agent inputs",
+        "decision_question": decision.question or decision.title,
+        "key_findings": all_findings,
+        "conflicts": [c.get('description', '') for c in conflicts],
+        "recommended_next_steps": all_recommendations[:3],
+        "confidence": 0.75
+    }
+
+
+def create_dossier(db: Session, decision, run, agent_outputs: Dict, 
+                   synthesis: Dict, conflicts: List, evidence: List) -> Dict:
+    """Create final dossier with all analysis results"""
+    return {
+        "decision_id": decision.id,
+        "run_id": run.id,
+        "agents_participated": list(agent_outputs.keys()),
+        "synthesis": synthesis,
+        "conflicts": conflicts,
+        "completed_at": datetime.utcnow().isoformat()
+    }
+
+
 class CouncilEngine:
     """Main engine for executing council runs"""
     

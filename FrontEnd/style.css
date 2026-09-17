@@ -1,31 +1,33 @@
-﻿/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   SIMORGH â€” Ø´ÙˆØ±Ø§ÛŒ Ù…Ø¯ÛŒØ±ÛŒØª Ù‡ÙˆØ´Ù…Ù†Ø¯ Â· Frontend Demo
-   Light executive UI Â· CSS custom properties
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+﻿/* ════════════════════════════════════════════════════════════
+   SIMORGH — شورای مدیریت هوشمند · Frontend Demo
+   Dark Executive UI · CSS custom properties
+   ════════════════════════════════════════════════════════════ */
 :root {
-    --bg: #f7f7f8;
-    --panel: #ffffff;
-    --panel2: #fbfbfc;
-    --border: #e4e4e7;
-    --border2: #ececef;
-    --text: #202123;
-    --text2: #6e6e80;
-    --text3: #a0a0ab;
-    --acc: #2563eb;
-    --acc-soft: #eaf1fe;
-    --acc-line: #c9dcfa;
-    --purple: #7c3aed;
-    --green: #059669;
-    --green-soft: #e7f6f0;
-    --amber: #d97706;
-    --amber-soft: #fdf3e3;
-    --red: #dc2626;
-    --red-soft: #fdeeee;
-    --cyan: #0891b2;
-    --slate: #64748b;
-    --sh-sm: 0 1px 2px rgba(16, 24, 40, .05);
-    --sh-md: 0 6px 22px -6px rgba(16, 24, 40, .14);
-    --sh-lg: 0 18px 50px -12px rgba(16, 24, 40, .22);
+    --bg: #0B0F14;
+    --surface: #111821;
+    --surface-2: #17212B;
+    --border: #25313D;
+
+    --primary: #19C3B1;
+    --primary-soft: rgba(25, 195, 177, 0.1);
+    --primary-line: rgba(25, 195, 177, 0.3);
+
+    --text: #F1F5F9;
+    --text-muted: #94A3B8;
+    --text-subtle: #64748B;
+
+    --success: #32D583;
+    --success-soft: rgba(50, 213, 131, 0.1);
+    --warning: #F5B942;
+    --warning-soft: rgba(245, 185, 66, 0.1);
+    --danger: #F05D5E;
+    --danger-soft: rgba(240, 93, 94, 0.1);
+    --info: #5B9CFF;
+    --info-soft: rgba(91, 156, 255, 0.1);
+
+    --sh-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --sh-md: 0 6px 22px -6px rgba(0, 0, 0, 0.5);
+    --sh-lg: 0 18px 50px -12px rgba(0, 0, 0, 0.6);
     --r-sm: 8px;
     --r-md: 12px;
     --r-lg: 16px;
@@ -66,7 +68,7 @@ button {
 
 button:focus-visible,
 input:focus-visible {
-    outline: 2px solid var(--acc);
+    outline: 2px solid var(--primary);
     outline-offset: 2px
 }
 
@@ -82,7 +84,7 @@ svg {
 }
 
 ::selection {
-    background: #dbe7fb
+    background: var(--primary-soft)
 }
 
 /* â•â•â• Ø±ÛŒÙ„ Ù†Ø§ÙˆØ¨Ø±ÛŒ â•â•â• */
@@ -98,8 +100,8 @@ svg {
     align-items: center;
     gap: 4px;
     padding: 10px 0;
-    background: var(--panel);
-    border-inline-end: 1px solid var(--border2);
+    background: var(--surface);
+    border-inline-end: 1px solid var(--border);
 }
 
 .rlogo {
@@ -122,13 +124,13 @@ svg {
     border-radius: 9px;
     display: grid;
     place-items: center;
-    color: var(--text3);
+    color: var(--text-subtle);
     transition: background .15s, color .15s;
 }
 
 .rbtn:hover {
-    background: var(--acc-soft);
-    color: var(--acc)
+    background: var(--primary-soft);
+    color: var(--primary)
 }
 
 .rbtn svg {
@@ -148,8 +150,8 @@ svg {
     display: flex;
     flex-direction: column;
     background:
-        radial-gradient(58% 42% at 50% 30%, rgba(37, 99, 235, .05), transparent 70%),
-        radial-gradient(40% 30% at 50% 55%, rgba(124, 58, 237, .025), transparent 70%),
+        radial-gradient(58% 42% at 50% 30%, rgba(25, 195, 177, .08), transparent 70%),
+        radial-gradient(40% 30% at 50% 55%, rgba(91, 156, 255, .04), transparent 70%),
         var(--bg);
 }
 
@@ -161,9 +163,9 @@ svg {
     align-items: center;
     gap: 12px;
     padding: 0 16px;
-    background: rgba(255, 255, 255, .85);
+    background: rgba(11, 15, 20, .85);
     backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--border2);
+    border-bottom: 1px solid var(--border);
     z-index: 20;
 }
 
@@ -174,12 +176,12 @@ svg {
     display: grid;
     place-items: center;
     flex: 0 0 auto;
-    color: var(--text2);
+    color: var(--text-muted);
     transition: background .15s, color .15s;
 }
 
 .hib:hover {
-    background: #f0f0f2;
+    background: var(--surface-2);
     color: var(--text)
 }
 
@@ -199,7 +201,7 @@ svg {
 
 .htopic small {
     font-size: 10px;
-    color: var(--text3);
+    color: var(--text-subtle);
     font-weight: 500
 }
 
@@ -230,10 +232,10 @@ svg {
     padding: 0 10px;
     border: 1px solid var(--border);
     border-radius: 99px;
-    background: var(--panel);
+    background: var(--surface);
     font-size: 11px;
     font-weight: 500;
-    color: var(--text2);
+    color: var(--text-muted);
     white-space: nowrap;
     transition: all .3s;
 }
@@ -242,29 +244,29 @@ svg {
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: var(--text3);
+    background: var(--text-subtle);
     flex: 0 0 auto
 }
 
 .hbadge.run {
-    border-color: #c9dcfa;
-    background: var(--acc-soft);
-    color: var(--acc)
+    border-color: var(--primary-line);
+    background: var(--primary-soft);
+    color: var(--primary)
 }
 
 .hbadge.run .dot {
-    background: var(--acc);
+    background: var(--primary);
     animation: pulse 1.4s ease-in-out infinite
 }
 
 .hbadge.done {
     border-color: #c4e6d8;
-    background: var(--green-soft);
-    color: var(--green)
+    background: var(--success-soft);
+    color: var(--success)
 }
 
 .hbadge.done .dot {
-    background: var(--green)
+    background: var(--success)
 }
 
 @keyframes pulse {
@@ -319,7 +321,7 @@ svg {
     padding: 15px 20px 20px;
     border-radius: var(--r-lg);
     text-align: right;
-    background: var(--panel);
+    background: var(--surface);
     border: 1px solid var(--border);
     box-shadow: var(--sh-sm);
     transition: box-shadow .2s, border-color .2s, transform .2s;
@@ -328,7 +330,7 @@ svg {
 
 
 .member:hover {
-    border-color: var(--acc-line);
+    border-color: var(--primary-line);
     box-shadow: var(--sh-md);
     transform: translateY(-2px)
 }
@@ -342,8 +344,8 @@ svg {
     border-radius: 12px;
     display: grid;
     place-items: center;
-    background: var(--ac-soft);
-    color: var(--ac-strong);
+    background: var(--primary-soft);
+    color: var(--primary);
     transition: transform .3s;
 }
 
@@ -364,13 +366,13 @@ svg {
 .member.thinking .ring,
 .member.speaking .ring,
 .member.analyzing .ring {
-    border-color: var(--ac);
+    border-color: var(--primary);
     opacity: .55;
     animation: ringPulse 1.6s ease-in-out infinite;
 }
 
 .member.listening .ring {
-    border-color: #d4d4d8;
+    border-color: var(--text-subtle);
     opacity: .8
 }
 
@@ -388,8 +390,8 @@ svg {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: #d4d4d8;
-    border: 2px solid var(--panel);
+    background: var(--text-subtle);
+    border: 2px solid var(--surface);
     transition: background .25s;
 }
 
@@ -400,12 +402,12 @@ svg {
 
 .member.analyzing .dotst,
 .member.speaking .dotst {
-    background: var(--acc);
+    background: var(--primary);
     animation: pulse 1.1s infinite
 }
 
 .member.completed .dotst {
-    background: var(--green)
+    background: var(--success)
 }
 
 .member .nm {
@@ -421,7 +423,7 @@ svg {
 .member .nm b {
     font-size: 9px;
     font-weight: 600;
-    color: var(--text3);
+    color: var(--text-subtle);
     letter-spacing: .4px
 }
 
@@ -431,7 +433,7 @@ svg {
     gap: 4px;
     font-size: 10px;
     font-weight: 600;
-    color: var(--text2);
+    color: var(--text-muted);
     min-height: 14px;
     padding-inline-start: 46px;
 }
@@ -444,7 +446,7 @@ svg {
 }
 
 .member.completed .st {
-    color: var(--green)
+    color: var(--success)
 }
 
 .member .bub {
@@ -466,7 +468,7 @@ svg {
     width: 100%;
     height: 3px;
     border-radius: 99px;
-    background: #eeeeef;
+    background: var(--border);
     overflow: hidden;
     margin-top: auto;
 }
@@ -476,7 +478,7 @@ svg {
     height: 100%;
     width: 0%;
     border-radius: 99px;
-    background: var(--ac);
+    background: var(--primary);
     transition: width .5s
 }
 
@@ -492,15 +494,15 @@ svg {
     height: 18px;
     padding: 0 5px;
     border-radius: 99px;
-    background: var(--red);
-    color: #fff;
+    background: var(--danger);
+    color: var(--text);
     font-size: 9.5px;
     font-weight: 700;
     display: grid;
     place-items: center;
     box-shadow: var(--sh-sm);
     cursor: pointer;
-    border: 2px solid var(--panel);
+    border: 2px solid var(--surface);
 }
 
 /* â•â•â• Ø¯Ø§Ú© Ú†Ø§Ù„Ø´â€ŒÙ‡Ø§ â•â•â• */
@@ -518,8 +520,8 @@ svg {
     padding: 8px 11px;
     border-radius: 10px;
     text-align: right;
-    background: var(--panel);
-    border: 1px solid #f3d9d9;
+    background: var(--surface);
+    border: 1px solid var(--danger-soft);
     box-shadow: var(--sh-sm);
     transition: box-shadow .2s, border-color .2s;
     cursor: pointer;
@@ -527,7 +529,7 @@ svg {
 
 .chal:hover {
     box-shadow: var(--sh-md);
-    border-color: #e8b4b4
+    border-color: var(--danger)
 }
 
 .chal .ci {
@@ -537,8 +539,8 @@ svg {
     border-radius: 8px;
     display: grid;
     place-items: center;
-    background: var(--red-soft);
-    color: var(--red);
+    background: var(--danger-soft);
+    color: var(--danger);
 }
 
 .chal .ci svg {
@@ -555,7 +557,7 @@ svg {
 
 .chal .ct b {
     font-size: 10.3px;
-    color: var(--red);
+    color: var(--danger);
     font-weight: 700
 }
 
@@ -581,7 +583,7 @@ svg {
 .conclusion {
     flex: 0 0 auto;
     padding: 12px 14px 11px;
-    background: var(--panel);
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--r-md);
     box-shadow: var(--sh-sm);
@@ -598,9 +600,9 @@ svg {
 .cc-head svg {
     width: 13px;
     height: 13px;
-    color: var(--purple);
-    fill: #ede9fe;
-    stroke: var(--purple);
+    color: var(--info);
+    fill: var(--info-soft);
+    stroke: var(--info);
     stroke-width: 1.4
 }
 
@@ -615,14 +617,14 @@ svg {
     align-items: center;
     gap: 4px;
     font-size: 9.5px;
-    color: var(--acc)
+    color: var(--primary)
 }
 
 .cc-live i {
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background: var(--acc);
+    background: var(--primary);
     animation: pulse 1.2s infinite
 }
 
@@ -641,7 +643,7 @@ svg {
 .cc-stats {
     margin-top: 9px;
     padding-top: 8px;
-    border-top: 1px solid var(--border2);
+    border-top: 1px solid var(--border);
     display: flex;
     flex-direction: column;
     gap: 6px
@@ -652,7 +654,7 @@ svg {
     align-items: center;
     gap: 7px;
     font-size: 10.5px;
-    color: var(--text2)
+    color: var(--text-muted)
 }
 
 .cc-stat .lbl {
@@ -674,19 +676,19 @@ svg {
     width: 6px;
     height: 6px;
     border-radius: 2px;
-    background: #e2e2e6;
+    background: var(--text-subtle);
     transition: background .3s
 }
 
 .dots5 i.on {
-    background: var(--acc)
+    background: var(--primary)
 }
 
 .cbar {
     flex: 1;
     height: 4px;
     border-radius: 99px;
-    background: #e8e8ec;
+    background: var(--border);
     overflow: hidden;
     min-width: 40px
 }
@@ -696,7 +698,7 @@ svg {
     height: 100%;
     width: 0%;
     border-radius: 99px;
-    background: linear-gradient(90deg, #93b8f8, var(--acc));
+    background: linear-gradient(90deg, var(--info), var(--primary));
     transition: width .6s cubic-bezier(.2, .8, .2, 1)
 }
 
@@ -707,8 +709,8 @@ svg {
     padding: 10px 12px;
     border-radius: var(--r-md);
     text-align: right;
-    background: #f4f6fd;
-    border: 1px solid var(--acc-line);
+    background: var(--primary-soft);
+    border: 1px solid var(--primary-line);
     box-shadow: var(--sh-sm);
     flex: 0 0 auto;
 }
@@ -720,8 +722,8 @@ svg {
     border-radius: 8px;
     display: grid;
     place-items: center;
-    background: var(--acc);
-    color: #fff;
+    background: var(--primary);
+    color: var(--text);
     font-size: 8.5px;
     font-weight: 700;
     padding: 0 4px;
@@ -762,10 +764,10 @@ svg {
     height: 26px;
     padding: 0 8px;
     border-radius: 8px;
-    background: var(--panel);
+    background: var(--surface);
     border: 1px solid var(--border);
     font-size: 11px;
-    color: var(--text2);
+    color: var(--text-muted);
 }
 
 .chip svg {
@@ -774,14 +776,14 @@ svg {
 }
 
 .chip button {
-    color: var(--text3);
+    color: var(--text-subtle);
     display: grid;
     place-items: center;
     font-size: 11px
 }
 
 .chip button:hover {
-    color: var(--red)
+    color: var(--danger)
 }
 
 .cbox {
@@ -789,15 +791,15 @@ svg {
     align-items: center;
     gap: 5px;
     padding: 7px 8px;
-    background: var(--panel);
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 14px;
     box-shadow: var(--sh-md);
 }
 
 .cbox:focus-within {
-    border-color: var(--acc-line);
-    box-shadow: 0 0 0 3px var(--acc-soft), var(--sh-md)
+    border-color: var(--primary-line);
+    box-shadow: 0 0 0 3px var(--primary-soft), var(--sh-md)
 }
 
 .cbtn {
@@ -808,7 +810,7 @@ svg {
     align-items: center;
     gap: 5px;
     padding: 0 7px;
-    color: var(--text2);
+    color: var(--text-muted);
     font-size: 11px;
     font-weight: 600;
     flex: 0 0 auto;
@@ -816,7 +818,7 @@ svg {
 }
 
 .cbtn:hover {
-    background: #f0f0f2;
+    background: var(--surface-2);
     color: var(--text)
 }
 
@@ -839,7 +841,7 @@ svg {
 }
 
 .cbox input::placeholder {
-    color: var(--text3)
+    color: var(--text-subtle)
 }
 
 .send {
@@ -850,7 +852,7 @@ svg {
     place-items: center;
     flex: 0 0 auto;
     background: var(--text);
-    color: #fff;
+    color: var(--text);
     transition: opacity .2s, transform .2s, background .2s;
 }
 
@@ -867,7 +869,7 @@ svg {
     margin-top: 7px;
     text-align: center;
     font-size: 10px;
-    color: var(--text3)
+    color: var(--text-subtle)
 }
 
 /* â•â•â• Ù¾Ø§Ù¾â€ŒØ§ÙˆØ±Ù‡Ø§ â•â•â• */
@@ -882,7 +884,7 @@ svg {
     z-index: 40;
     min-width: 190px;
     padding: 5px;
-    background: var(--panel);
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--r-md);
     box-shadow: var(--sh-lg);
@@ -916,14 +918,14 @@ svg {
 .pop button svg {
     width: 14px;
     height: 14px;
-    color: var(--text2)
+    color: var(--text-muted)
 }
 
 .pop .ptitle {
     padding: 7px 10px 5px;
     font-size: 10px;
     font-weight: 700;
-    color: var(--text3)
+    color: var(--text-subtle)
 }
 
 .pop.wmenu {
@@ -939,17 +941,17 @@ svg {
 }
 
 .pop.wmenu button span {
-    color: var(--text3);
+    color: var(--text-subtle);
     font-size: 11px
 }
 
 .pop.wmenu button.on {
-    background: var(--acc-soft);
-    color: var(--acc)
+    background: var(--primary-soft);
+    color: var(--primary)
 }
 
 .pop.wmenu button.on span {
-    color: var(--acc)
+    color: var(--primary)
 }
 
 /* â•â•â• Ø¬Ø±ÛŒØ§Ù† Ø¨Ø­Ø« (Ù…ÙˆØ¨Ø§ÛŒÙ„) Ùˆ ØµÙˆØ±Øªâ€ŒØ¬Ù„Ø³Ù‡ â•â•â• */
@@ -976,8 +978,8 @@ svg {
     gap: 3px;
     padding: 9px 11px;
     border-radius: 10px;
-    background: var(--panel2);
-    border: 1px solid var(--border2);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
     text-align: right;
 }
 
@@ -993,7 +995,7 @@ svg {
 }
 
 .logrow .lr-h .tag {
-    color: var(--text3);
+    color: var(--text-subtle);
     font-weight: 500
 }
 
@@ -1006,23 +1008,23 @@ svg {
 }
 
 .logrow .lr-h .kind.op {
-    background: var(--acc-soft);
-    color: var(--acc)
+    background: var(--primary-soft);
+    color: var(--primary)
 }
 
 .logrow .lr-h .kind.ch {
-    background: var(--red-soft);
-    color: var(--red)
+    background: var(--danger-soft);
+    color: var(--danger)
 }
 
 .logrow .lr-h .kind.syn {
     background: #f1eafd;
-    color: var(--purple)
+    color: var(--info)
 }
 
 .logrow .lr-h .kind.ceo {
-    background: var(--amber-soft);
-    color: var(--amber)
+    background: var(--warning-soft);
+    color: var(--warning)
 }
 
 .logrow p {
@@ -1038,8 +1040,8 @@ svg {
     display: grid;
     place-items: center;
     flex: 0 0 auto;
-    background: var(--ac-soft);
-    color: var(--ac-strong);
+    background: var(--primary-soft);
+    color: var(--primary);
 }
 
 .avatar svg {
@@ -1069,7 +1071,7 @@ svg {
     inset-inline-start: 0;
     width: 288px;
     z-index: 85;
-    background: var(--panel);
+    background: var(--surface);
     box-shadow: var(--sh-lg);
     transform: translateX(100%);
     transition: transform .3s cubic-bezier(.3, .8, .3, 1);
@@ -1092,7 +1094,7 @@ svg {
     align-items: center;
     gap: 10px;
     padding: 6px 6px 12px;
-    border-bottom: 1px solid var(--border2);
+    border-bottom: 1px solid var(--border);
     margin-bottom: 8px
 }
 
@@ -1103,15 +1105,15 @@ svg {
 
 .drawer header small {
     font-size: 10px;
-    color: var(--text3)
+    color: var(--text-subtle)
 }
 
 .dlogo {
     width: 34px;
     height: 34px;
     border-radius: 10px;
-    background: var(--panel2);
-    border: 1px solid var(--border2);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
     display: grid;
     place-items: center;
     color: var(--text)
@@ -1127,13 +1129,13 @@ svg {
     width: 26px;
     height: 26px;
     border-radius: 8px;
-    color: var(--text3);
+    color: var(--text-subtle);
     display: grid;
     place-items: center
 }
 
 .drawer .x:hover {
-    background: #f0f0f2;
+    background: var(--surface-2);
     color: var(--text)
 }
 
@@ -1145,15 +1147,15 @@ svg {
     padding: 10px 11px;
     margin-bottom: 10px;
     border-radius: 10px;
-    border: 1px solid #f3d9d9;
-    background: var(--red-soft);
+    border: 1px solid var(--danger-soft);
+    background: var(--danger-soft);
     text-align: right;
 }
 
 .dexit svg {
     width: 16px;
     height: 16px;
-    color: var(--red);
+    color: var(--danger);
     flex: 0 0 auto
 }
 
@@ -1164,7 +1166,7 @@ svg {
 
 .dexit b {
     font-size: 12.5px;
-    color: var(--red);
+    color: var(--danger);
     font-weight: 700
 }
 
@@ -1193,14 +1195,14 @@ svg {
 .ditem svg {
     width: 15px;
     height: 15px;
-    color: var(--text2)
+    color: var(--text-muted)
 }
 
 .ditem .chev {
     margin-inline-start: auto;
     width: 13px;
     height: 13px;
-    color: var(--text3);
+    color: var(--text-subtle);
     transition: transform .25s
 }
 
@@ -1246,7 +1248,7 @@ svg {
 .drow .dd {
     margin-inline-start: auto;
     font-size: 9.5px;
-    color: var(--text3);
+    color: var(--text-subtle);
     flex: 0 0 auto
 }
 
@@ -1257,8 +1259,8 @@ svg {
     display: grid;
     place-items: center;
     flex: 0 0 auto;
-    background: var(--ac-soft, var(--acc-soft));
-    color: var(--ac-strong, var(--acc));
+    background: var(--ac-soft, var(--primary-soft));
+    color: var(--ac-strong, var(--primary));
 }
 
 .drow .pi svg {
@@ -1282,7 +1284,7 @@ svg {
 
 .drow .pd small {
     font-size: 9.5px;
-    color: var(--text3)
+    color: var(--text-subtle)
 }
 
 /* â•â•â• Ù¾Ù†Ù„ Ø¬Ø²Ø¦ÛŒØ§Øª Ø¹Ø¶Ùˆ â•â•â• */
@@ -1301,7 +1303,7 @@ svg {
     width: 348px;
     max-width: calc(100vw - 28px);
     z-index: 95;
-    background: var(--panel);
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--r-lg);
     box-shadow: var(--sh-lg);
@@ -1315,8 +1317,8 @@ svg {
     align-items: center;
     gap: 10px;
     padding: 14px 16px;
-    border-bottom: 1px solid var(--border2);
-    background: linear-gradient(180deg, color-mix(in srgb, var(--ac) 6%, #fff), #fff)
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, var(--surface-2), var(--surface))
 }
 
 .ap-av {
@@ -1325,8 +1327,8 @@ svg {
     border-radius: 11px;
     display: grid;
     place-items: center;
-    background: var(--ac-soft);
-    color: var(--ac-strong);
+    background: var(--primary-soft);
+    color: var(--primary);
     flex: 0 0 auto
 }
 
@@ -1347,7 +1349,7 @@ svg {
 
 .ap-tt small {
     font-size: 10px;
-    color: var(--text3);
+    color: var(--text-subtle);
     letter-spacing: .4px
 }
 
@@ -1360,12 +1362,12 @@ svg {
 .ap-conf b {
     display: block;
     font-size: 15px;
-    color: var(--ac)
+    color: var(--primary)
 }
 
 .ap-conf small {
     font-size: 9px;
-    color: var(--text3)
+    color: var(--text-subtle)
 }
 
 .ap-x {
@@ -1373,14 +1375,14 @@ svg {
     width: 28px;
     height: 28px;
     border-radius: 8px;
-    color: var(--text3);
+    color: var(--text-subtle);
     display: grid;
     place-items: center;
     flex: 0 0 auto
 }
 
 .ap-x:hover {
-    background: #f0f0f2;
+    background: var(--surface-2);
     color: var(--text)
 }
 
@@ -1395,7 +1397,7 @@ svg {
 .ap-sec {
     font-size: 10px;
     font-weight: 700;
-    color: var(--text3);
+    color: var(--text-subtle);
     letter-spacing: .3px;
     display: flex;
     align-items: center;
@@ -1406,14 +1408,14 @@ svg {
     content: '';
     flex: 1;
     height: 1px;
-    background: var(--border2)
+    background: var(--border)
 }
 
 .ap-hl {
     padding: 10px 12px;
     border-radius: 10px;
-    background: color-mix(in srgb, var(--ac) 6%, #fff);
-    border: 1px solid color-mix(in srgb, var(--ac) 16%, #fff);
+    background: var(--surface-2);
+    border: 1px solid var(--primary-line);
     font-size: 12.3px;
     line-height: 1.9;
     font-weight: 500;
@@ -1422,8 +1424,8 @@ svg {
 .arg {
     padding: 10px 12px;
     border-radius: 10px;
-    border: 1px solid var(--border2);
-    background: var(--panel2);
+    border: 1px solid var(--border);
+    background: var(--surface-2);
     display: flex;
     flex-direction: column;
     gap: 5px
@@ -1439,8 +1441,8 @@ svg {
 .arg .angle {
     font-size: 10px;
     font-weight: 700;
-    color: var(--ac);
-    background: color-mix(in srgb, var(--ac) 9%, #fff);
+    color: var(--primary);
+    background: var(--primary-soft);
     padding: 2px 8px;
     border-radius: 99px
 }
@@ -1453,7 +1455,7 @@ svg {
 .arg .because {
     font-size: 11.3px;
     line-height: 1.8;
-    color: var(--text2)
+    color: var(--text-muted)
 }
 
 .arg .because b {
@@ -1472,8 +1474,8 @@ svg {
     align-items: center;
     gap: 4px;
     font-size: 10px;
-    color: var(--text2);
-    background: var(--panel);
+    color: var(--text-muted);
+    background: var(--surface);
     border: 1px solid var(--border);
     padding: 2px 8px;
     border-radius: 99px;
@@ -1491,14 +1493,14 @@ svg {
     font-size: 11.8px;
     padding: 8px 11px;
     border-radius: 9px;
-    background: var(--red-soft);
+    background: var(--danger-soft);
     color: #8c3a3a
 }
 
 .riskrow svg {
     width: 13px;
     height: 13px;
-    color: var(--red);
+    color: var(--danger);
     flex: 0 0 auto
 }
 
@@ -1509,14 +1511,14 @@ svg {
     font-size: 11.8px;
     padding: 8px 11px;
     border-radius: 9px;
-    background: var(--amber-soft);
+    background: var(--warning-soft);
     color: #7a5210
 }
 
 .condrow svg {
     width: 13px;
     height: 13px;
-    color: var(--amber);
+    color: var(--warning);
     flex: 0 0 auto
 }
 
@@ -1532,8 +1534,8 @@ svg {
     gap: 4px;
     padding: 9px 11px;
     border-radius: 10px;
-    border: 1px solid #f3d9d9;
-    background: #fffafa;
+    border: 1px solid var(--danger-soft);
+    background: var(--danger-soft);
     text-align: right;
 }
 
@@ -1543,7 +1545,7 @@ svg {
     gap: 6px;
     font-size: 10.3px;
     font-weight: 700;
-    color: var(--red)
+    color: var(--danger)
 }
 
 .chrow .chh svg {
@@ -1564,7 +1566,7 @@ svg {
     width: 300px;
     padding: 12px 13px;
     border-radius: var(--r-md);
-    background: var(--panel);
+    background: var(--surface);
     border: 1px solid var(--border);
     box-shadow: var(--sh-lg);
     text-align: right;
@@ -1579,11 +1581,11 @@ svg {
 
 .chalpop .cph b {
     font-size: 11px;
-    color: var(--red)
+    color: var(--danger)
 }
 
 .chalpop .cph .arrow {
-    color: var(--text3);
+    color: var(--text-subtle);
     font-size: 10px
 }
 
@@ -1596,7 +1598,7 @@ svg {
     width: 22px;
     height: 22px;
     border-radius: 7px;
-    color: var(--text3);
+    color: var(--text-subtle);
     display: grid;
     place-items: center;
     font-size: 11px;
@@ -1604,16 +1606,16 @@ svg {
 }
 
 .chalpop .x:hover {
-    background: #f0f0f2;
+    background: var(--surface-2);
     color: var(--text)
 }
 
 .sparkbox {
     height: 104px;
-    border: 1px solid var(--border2);
+    border: 1px solid var(--border);
     border-radius: 10px;
     padding: 8px;
-    background: var(--panel2)
+    background: var(--surface-2)
 }
 
 .chalpop p {
@@ -1634,89 +1636,89 @@ svg {
 .chalpop .cpev b {
     font-size: 9.5px;
     font-weight: 700;
-    color: var(--text3)
+    color: var(--text-subtle)
 }
 
 .chalpop .cpev span {
     font-size: 10.8px;
-    color: var(--text2);
+    color: var(--text-muted);
     line-height: 1.7
 }
 
 /* ═══ گزارش و پیشنهاد نهایی شورا ═══ */
 .frec {
   position: fixed; bottom: 14px; inset-inline-end: 14px; width: 340px; z-index: 55;
-  background: var(--panel); border: 1px solid var(--acc-line); border-radius: var(--r-lg);
+  background: var(--surface); border: 1px solid var(--primary-line); border-radius: var(--r-lg);
   box-shadow: var(--sh-lg); overflow: hidden; max-height: min(78vh, 620px);
   display: flex; flex-direction: column;
 }
-.frec header { display: flex; align-items: center; gap: 9px; padding: 11px 14px; background: linear-gradient(180deg, #f6f9ff, #fff); border-bottom: 1px solid var(--border2); flex: 0 0 auto }
-.frec .fi { width: 26px; height: 26px; border-radius: 8px; background: var(--acc-soft); color: var(--acc); display: grid; place-items: center; flex: 0 0 auto }
+.frec header { display: flex; align-items: center; gap: 9px; padding: 11px 14px; background: linear-gradient(180deg, var(--surface-2), var(--surface)); border-bottom: 1px solid var(--border); flex: 0 0 auto }
+.frec .fi { width: 26px; height: 26px; border-radius: 8px; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; flex: 0 0 auto }
 .frec .fi svg { width: 14px; height: 14px; stroke-width: 1.8 }
 .frec header b { font-size: 12.5px; display: block }
-.frec header small { font-size: 9.5px; color: var(--text3) }
-.frec .x { margin-inline-start: auto; width: 24px; height: 24px; border-radius: 7px; color: var(--text3); display: grid; place-items: center }
-.frec .x:hover { background: #f0f0f2; color: var(--text) }
+.frec header small { font-size: 9.5px; color: var(--text-subtle) }
+.frec .x { margin-inline-start: auto; width: 24px; height: 24px; border-radius: 7px; color: var(--text-subtle); display: grid; place-items: center }
+.frec .x:hover { background: var(--surface-2); color: var(--text) }
 .fr-body { overflow-y: auto; padding: 12px 14px 6px; flex: 1; min-height: 0 }
-.fr-sec { font-size: 10px; font-weight: 700; color: var(--text3); letter-spacing: .3px; display: flex; align-items: center; gap: 8px; margin: 8px 0 }
-.fr-sec::after { content: ''; flex: 1; height: 1px; background: var(--border2) }
+.fr-sec { font-size: 10px; font-weight: 700; color: var(--text-subtle); letter-spacing: .3px; display: flex; align-items: center; gap: 8px; margin: 8px 0 }
+.fr-sec::after { content: ''; flex: 1; height: 1px; background: var(--border) }
 .fr-sec:first-child { margin-top: 0 }
 .fr-report { display: flex; flex-direction: column; gap: 7px }
-.fr-row { padding: 8px 11px; border-radius: 10px; background: var(--panel2); border: 1px solid var(--border2) }
-.fr-row b { font-size: 10.5px; color: var(--acc); display: block; margin-bottom: 3px }
+.fr-row { padding: 8px 11px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border) }
+.fr-row b { font-size: 10.5px; color: var(--primary); display: block; margin-bottom: 3px }
 .fr-row p { font-size: 11.3px; line-height: 1.8; color: var(--text) }
 .fr-rec { font-size: 12.6px; font-weight: 600; line-height: 1.9 }
-.fr-conf { display: flex; align-items: center; gap: 8px; padding: 6px 0 10px; font-size: 10.5px; color: var(--text2) }
+.fr-conf { display: flex; align-items: center; gap: 8px; padding: 6px 0 10px; font-size: 10.5px; color: var(--text-muted) }
 .fr-conf .cbar { flex: 1 }
 .fr-conf b { color: var(--text) }
 .fr-acts { list-style: none; padding: 0 0 10px; display: flex; flex-direction: column; gap: 6px; counter-reset: act }
-.fr-acts li { display: flex; align-items: center; gap: 9px; padding: 8px 11px; border-radius: 10px; background: var(--panel2); border: 1px solid var(--border2); counter-increment: act }
-.fr-acts li::before { content: counter(act); width: 18px; height: 18px; border-radius: 6px; flex: 0 0 auto; background: var(--acc-soft); color: var(--acc); font-size: 10px; font-weight: 700; display: grid; place-items: center }
+.fr-acts li { display: flex; align-items: center; gap: 9px; padding: 8px 11px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border); counter-increment: act }
+.fr-acts li::before { content: counter(act); width: 18px; height: 18px; border-radius: 6px; flex: 0 0 auto; background: var(--primary-soft); color: var(--primary); font-size: 10px; font-weight: 700; display: grid; place-items: center }
 .fr-acts .fa-t { display: flex; flex-direction: column; min-width: 0 }
 .fr-acts .fa-t b { font-size: 11.3px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
-.fr-acts .fa-t small { font-size: 9.5px; color: var(--text3) }
+.fr-acts .fa-t small { font-size: 9.5px; color: var(--text-subtle) }
 .fr-acts .when { margin-inline-start: auto; font-size: 9.5px; font-weight: 700; padding: 3px 8px; border-radius: 99px; flex: 0 0 auto }
-.fr-acts .when.now { background: var(--red-soft); color: var(--red) }
-.fr-acts .when.d30 { background: var(--amber-soft); color: var(--amber) }
-.fr-acts .when.d90 { background: var(--acc-soft); color: var(--acc) }
+.fr-acts .when.now { background: var(--danger-soft); color: var(--danger) }
+.fr-acts .when.d30 { background: var(--warning-soft); color: var(--warning) }
+.fr-acts .when.d90 { background: var(--primary-soft); color: var(--primary) }
 .fr-cta {
   display: flex; align-items: center; justify-content: center; gap: 8px; flex: 0 0 auto;
-  margin: 0 14px 13px; height: 38px; border-radius: 11px; background: var(--acc); color: #fff;
+  margin: 0 14px 13px; height: 38px; border-radius: 11px; background: var(--primary); color: var(--text);
   font-size: 12.5px; font-weight: 700; transition: background .2s, transform .15s;
 }
 .fr-cta:hover { background: #1d4ed8; transform: translateY(-1px) }
 .fr-cta svg { width: 15px; height: 15px }
 .frecpill {
   position: fixed; bottom: 14px; inset-inline-end: 14px; z-index: 54; display: inline-flex; align-items: center; gap: 7px;
-  height: 36px; padding: 0 13px; border-radius: 99px; background: var(--text); color: #fff;
+  height: 36px; padding: 0 13px; border-radius: 99px; background: var(--text); color: var(--text);
   font-size: 11.5px; font-weight: 600; box-shadow: var(--sh-md);
 }
 .frecpill svg { width: 13px; height: 13px; stroke-width: 1.8 }
 
 /* ═══ پرونده تصمیم (مودال) ═══ */
 .casefile { font-size: 12px; line-height: 1.9 }
-.cf-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; font-size: 10.5px; color: var(--text2) }
-.cf-id { font-weight: 700; color: var(--acc); background: var(--acc-soft); padding: 2px 9px; border-radius: 99px; font-size: 10px }
+.cf-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; font-size: 10.5px; color: var(--text-muted) }
+.cf-id { font-weight: 700; color: var(--primary); background: var(--primary-soft); padding: 2px 9px; border-radius: 99px; font-size: 10px }
 .cf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 12px }
-.cf-cell { padding: 8px 11px; border-radius: 10px; background: var(--panel2); border: 1px solid var(--border2) }
+.cf-cell { padding: 8px 11px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border) }
 .cf-cell.w2 { grid-column: 1 / -1 }
-.cf-cell small { display: block; font-size: 9.5px; color: var(--text3); margin-bottom: 2px }
+.cf-cell small { display: block; font-size: 9.5px; color: var(--text-subtle); margin-bottom: 2px }
 .cf-cell b { font-size: 11.8px; font-weight: 600 }
-.cf-sec { font-size: 10px; font-weight: 700; color: var(--text3); letter-spacing: .3px; display: flex; align-items: center; gap: 8px; margin: 13px 0 8px }
-.cf-sec::after { content: ''; flex: 1; height: 1px; background: var(--border2) }
+.cf-sec { font-size: 10px; font-weight: 700; color: var(--text-subtle); letter-spacing: .3px; display: flex; align-items: center; gap: 8px; margin: 13px 0 8px }
+.cf-sec::after { content: ''; flex: 1; height: 1px; background: var(--border) }
 .cf-checks { display: grid; grid-template-columns: 1fr 1fr; gap: 7px }
-.cf-chk { padding: 8px 11px; border-radius: 10px; background: var(--panel2); border: 1px solid var(--border2) }
-.cf-chk b { font-size: 10.8px; color: var(--acc); display: block; margin-bottom: 4px }
+.cf-chk { padding: 8px 11px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border) }
+.cf-chk b { font-size: 10.8px; color: var(--primary); display: block; margin-bottom: 4px }
 .cf-chk ul { list-style: none; display: flex; flex-direction: column; gap: 2px }
-.cf-chk li { font-size: 10.8px; color: var(--text2); padding-inline-start: 12px; position: relative }
-.cf-chk li::before { content: ''; position: absolute; inset-inline-start: 0; top: 8px; width: 4px; height: 4px; border-radius: 2px; background: var(--acc-line) }
+.cf-chk li { font-size: 10.8px; color: var(--text-muted); padding-inline-start: 12px; position: relative }
+.cf-chk li::before { content: ''; position: absolute; inset-inline-start: 0; top: 8px; width: 4px; height: 4px; border-radius: 2px; background: var(--primary-line) }
 .cf-sc { display: flex; flex-direction: column; gap: 6px }
-.cf-scrow { display: flex; gap: 9px; align-items: flex-start; padding: 8px 11px; border-radius: 10px; background: var(--panel2); border: 1px solid var(--border2) }
-.cf-scrow b { width: 22px; height: 22px; border-radius: 7px; flex: 0 0 auto; background: var(--acc-soft); color: var(--acc); display: grid; place-items: center; font-size: 11px }
+.cf-scrow { display: flex; gap: 9px; align-items: flex-start; padding: 8px 11px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border) }
+.cf-scrow b { width: 22px; height: 22px; border-radius: 7px; flex: 0 0 auto; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-size: 11px }
 .cf-scrow p { font-size: 11.5px; font-weight: 600 }
-.cf-scrow small { font-size: 10.3px; color: var(--text2); line-height: 1.7 }
+.cf-scrow small { font-size: 10.3px; color: var(--text-muted); line-height: 1.7 }
 .cf-q { font-size: 11.8px; line-height: 1.95; font-weight: 600; color: var(--text) }
-.cf-q2 { font-size: 11.3px; line-height: 1.9; color: var(--text2); margin-top: 7px; padding-top: 7px; border-top: 1px dashed var(--border) }
+.cf-q2 { font-size: 11.3px; line-height: 1.9; color: var(--text-muted); margin-top: 7px; padding-top: 7px; border-top: 1px dashed var(--border) }
 
 /* â•â•â• Ù…ÙˆØ¯Ø§Ù„â€ŒÙ‡Ø§ â•â•â• */
 .overlay {
@@ -1740,7 +1742,7 @@ svg {
 .modal {
     width: 100%;
     max-width: 420px;
-    background: var(--panel);
+    background: var(--surface);
     border-radius: var(--r-lg);
     box-shadow: var(--sh-lg);
     padding: 20px;
@@ -1764,7 +1766,7 @@ svg {
 
 .modal .muted {
     font-size: 12px;
-    color: var(--text2);
+    color: var(--text-muted);
     line-height: 1.9;
     margin-bottom: 12px
 }
@@ -1783,7 +1785,7 @@ svg {
     font-size: 12.3px;
     font-weight: 600;
     border: 1px solid var(--border);
-    background: var(--panel);
+    background: var(--surface);
     color: var(--text);
     display: inline-flex;
     align-items: center;
@@ -1797,7 +1799,7 @@ svg {
 
 .btn.g {
     background: var(--text);
-    color: #fff;
+    color: var(--text);
     border-color: var(--text)
 }
 
@@ -1806,9 +1808,9 @@ svg {
 }
 
 .btn.r {
-    background: var(--red);
-    color: #fff;
-    border-color: var(--red)
+    background: var(--danger);
+    color: var(--text);
+    border-color: var(--danger)
 }
 
 .btn.r:hover {
@@ -1824,14 +1826,14 @@ svg {
     font: inherit;
     font-size: 13px;
     outline: 0;
-    background: var(--panel2);
+    background: var(--surface-2);
     color: var(--text);
 }
 
 .tin:focus {
-    border-color: var(--acc-line);
-    box-shadow: 0 0 0 3px var(--acc-soft);
-    background: #fff
+    border-color: var(--primary-line);
+    box-shadow: 0 0 0 3px var(--primary-soft);
+    background: var(--surface)
 }
 
 #genBody {
@@ -1845,7 +1847,7 @@ svg {
     align-items: flex-start;
     gap: 9px;
     padding: 8px 0;
-    border-bottom: 1px solid var(--border2)
+    border-bottom: 1px solid var(--border)
 }
 
 /* ═══ داشبورد ═══ */
@@ -1864,10 +1866,10 @@ svg {
 .dash-hero {
     text-align: center;
     padding: 40px 20px;
-    background: linear-gradient(135deg, var(--acc-soft) 0%, var(--panel) 100%);
+    background: linear-gradient(135deg, var(--primary-soft) 0%, var(--surface) 100%);
     border-radius: var(--r-lg);
     margin-bottom: 24px;
-    border: 1px solid var(--border2);
+    border: 1px solid var(--border);
 }
 
 .dash-hero h2 {
@@ -1879,7 +1881,7 @@ svg {
 
 .dash-hero p {
     font-size: 14px;
-    color: var(--text2);
+    color: var(--text-muted);
     margin-bottom: 20px;
     max-width: 500px;
     margin-left: auto;
@@ -1893,8 +1895,8 @@ svg {
     font-size: 13px;
     font-weight: 600;
     border: none;
-    background: var(--acc);
-    color: #fff;
+    background: var(--primary);
+    color: var(--text);
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -1921,7 +1923,7 @@ svg {
 }
 
 .dash-card {
-    background: var(--panel);
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--r-lg);
     padding: 16px;
@@ -1934,7 +1936,7 @@ svg {
     align-items: center;
     margin-bottom: 12px;
     padding-bottom: 12px;
-    border-bottom: 1px solid var(--border2);
+    border-bottom: 1px solid var(--border);
 }
 
 .dash-card h3 {
@@ -1945,7 +1947,7 @@ svg {
 
 .dash-card a {
     font-size: 12px;
-    color: var(--acc);
+    color: var(--primary);
     text-decoration: none;
     font-weight: 500;
 }
@@ -1965,16 +1967,16 @@ svg {
     justify-content: space-between;
     align-items: center;
     padding: 12px;
-    background: var(--panel2);
+    background: var(--surface-2);
     border-radius: var(--r-md);
-    border: 1px solid var(--border2);
+    border: 1px solid var(--border);
     cursor: pointer;
     transition: all .2s;
 }
 
 .decision-item:hover, .run-item:hover {
-    border-color: var(--acc-line);
-    background: var(--acc-soft);
+    border-color: var(--primary-line);
+    background: var(--primary-soft);
     transform: translateX(-2px);
 }
 
@@ -1987,7 +1989,7 @@ svg {
 
 .decision-info p, .run-info p {
     font-size: 11px;
-    color: var(--text2);
+    color: var(--text-muted);
 }
 
 .status-badge {
@@ -1995,24 +1997,24 @@ svg {
     padding: 2px 8px;
     border-radius: 99px;
     font-weight: 600;
-    background: var(--amber-soft);
-    color: var(--amber);
+    background: var(--warning-soft);
+    color: var(--warning);
 }
 
 .status-badge.completed {
-    background: var(--green-soft);
-    color: var(--green);
+    background: var(--success-soft);
+    color: var(--success);
 }
 
 .status-badge.running {
-    background: var(--acc-soft);
-    color: var(--acc);
+    background: var(--primary-soft);
+    color: var(--primary);
 }
 
 .empty-state {
     text-align: center;
     padding: 30px;
-    color: var(--text3);
+    color: var(--text-subtle);
     font-size: 13px;
 }
 
@@ -2023,7 +2025,7 @@ svg {
     align-items: center;
     margin-bottom: 20px;
     padding-bottom: 16px;
-    border-bottom: 1px solid var(--border2);
+    border-bottom: 1px solid var(--border);
 }
 
 .view-header h2 {
@@ -2039,8 +2041,8 @@ svg {
     font-size: 12px;
     font-weight: 500;
     border: 1px solid var(--border);
-    background: var(--panel);
-    color: var(--text2);
+    background: var(--surface);
+    color: var(--text-muted);
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -2072,7 +2074,7 @@ svg {
 }
 
 .decision-info {
-    background: var(--panel);
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--r-lg);
     padding: 20px;
@@ -2114,12 +2116,12 @@ svg {
     content: "•";
     position: absolute;
     inset-inline-start: 0;
-    color: var(--acc);
+    color: var(--primary);
     font-weight: 700;
 }
 
 .runs-section {
-    background: var(--panel);
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--r-lg);
     padding: 20px;
@@ -2148,7 +2150,7 @@ svg {
 .progress-steps {
     display: flex;
     justify-content: space-between;
-    background: var(--panel);
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--r-lg);
     padding: 16px;
@@ -2169,7 +2171,7 @@ svg {
 
 .step.active {
     opacity: 1;
-    background: var(--acc-soft);
+    background: var(--primary-soft);
 }
 
 .step.completed {
@@ -2194,7 +2196,7 @@ svg {
 }
 
 .agent-card {
-    background: var(--panel);
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--r-lg);
     padding: 16px;
@@ -2215,7 +2217,7 @@ svg {
     display: grid;
     place-items: center;
     font-size: 18px;
-    background: var(--acc-soft);
+    background: var(--primary-soft);
 }
 
 .agent-name {
@@ -2226,7 +2228,7 @@ svg {
 
 .agent-status {
     font-size: 11px;
-    color: var(--text2);
+    color: var(--text-muted);
 }
 
 .agent-content {
@@ -2261,11 +2263,11 @@ svg {
     content: "•";
     position: absolute;
     inset-inline-start: 0;
-    color: var(--acc);
+    color: var(--primary);
 }
 
 .conflicts-section, .synthesis-section {
-    background: var(--panel);
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--r-lg);
     padding: 20px;
@@ -2279,8 +2281,8 @@ svg {
 }
 
 .conflict-item {
-    background: var(--red-soft);
-    border: 1px solid #f3d9d9;
+    background: var(--danger-soft);
+    border: 1px solid var(--danger-soft);
     border-radius: var(--r-md);
     padding: 12px;
     margin-bottom: 8px;
@@ -2289,7 +2291,7 @@ svg {
 .conflict-topic {
     font-size: 12px;
     font-weight: 600;
-    color: var(--red);
+    color: var(--danger);
     margin-bottom: 6px;
 }
 
@@ -2313,7 +2315,7 @@ svg {
 }
 
 .dossier-section {
-    background: var(--panel);
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--r-lg);
     padding: 20px;
@@ -2325,7 +2327,7 @@ svg {
     color: var(--text);
     margin-bottom: 12px;
     padding-bottom: 8px;
-    border-bottom: 1px solid var(--border2);
+    border-bottom: 1px solid var(--border);
 }
 
 .dossier-section p {
@@ -2353,23 +2355,23 @@ svg {
     content: "•";
     position: absolute;
     inset-inline-start: 0;
-    color: var(--acc);
+    color: var(--primary);
 }
 
 .dossier-section ol li::before {
     content: counter(list-item) ".";
     font-weight: 600;
-    color: var(--acc);
+    color: var(--primary);
 }
 
 .human-decision-section {
-    background: linear-gradient(135deg, var(--acc-soft) 0%, var(--panel) 100%);
-    border-color: var(--acc-line);
+    background: linear-gradient(135deg, var(--primary-soft) 0%, var(--surface) 100%);
+    border-color: var(--primary-line);
 }
 
 .decision-note {
     font-size: 12px;
-    color: var(--text2);
+    color: var(--text-muted);
     margin-bottom: 16px;
     font-style: italic;
 }
@@ -2393,8 +2395,8 @@ svg {
 }
 
 .btn-approve {
-    background: var(--green);
-    color: #fff;
+    background: var(--success);
+    color: var(--text);
 }
 
 .btn-approve:hover {
@@ -2402,8 +2404,8 @@ svg {
 }
 
 .btn-reject {
-    background: var(--red);
-    color: #fff;
+    background: var(--danger);
+    color: var(--text);
 }
 
 .btn-reject:hover {
@@ -2411,8 +2413,8 @@ svg {
 }
 
 .btn-defer {
-    background: var(--amber);
-    color: #fff;
+    background: var(--warning);
+    color: var(--text);
 }
 
 .btn-defer:hover {
@@ -2421,7 +2423,7 @@ svg {
 
 .btn-revision {
     background: var(--slate);
-    color: #fff;
+    color: var(--text);
 }
 
 .btn-revision:hover {
@@ -2437,16 +2439,16 @@ svg {
     font: inherit;
     font-size: 13px;
     resize: vertical;
-    background: var(--panel2);
+    background: var(--surface-2);
     color: var(--text);
     margin-bottom: 12px;
 }
 
 .decision-input:focus {
     outline: none;
-    border-color: var(--acc-line);
-    box-shadow: 0 0 0 3px var(--acc-soft);
-    background: #fff;
+    border-color: var(--primary-line);
+    box-shadow: 0 0 0 3px var(--primary-soft);
+    background: var(--surface);
 }
 
 /* ═══ فرم ایجاد تصمیم ═══ */
@@ -2474,15 +2476,15 @@ svg {
     padding: 12px;
     font: inherit;
     font-size: 13px;
-    background: var(--panel2);
+    background: var(--surface-2);
     color: var(--text);
 }
 
 .form-group input:focus, .form-group textarea:focus {
     outline: none;
-    border-color: var(--acc-line);
-    box-shadow: 0 0 0 3px var(--acc-soft);
-    background: #fff;
+    border-color: var(--primary-line);
+    box-shadow: 0 0 0 3px var(--primary-soft);
+    background: var(--surface);
 }
 
 .form-group textarea {
@@ -2492,7 +2494,7 @@ svg {
 
 .form-hint {
     font-size: 11px;
-    color: var(--text3);
+    color: var(--text-subtle);
     margin-top: 6px;
 }
 
@@ -2502,7 +2504,7 @@ svg {
     justify-content: flex-end;
     margin-top: 24px;
     padding-top: 20px;
-    border-top: 1px solid var(--border2);
+    border-top: 1px solid var(--border);
 }
 
 .btn-secondary {
@@ -2512,8 +2514,8 @@ svg {
     font-size: 13px;
     font-weight: 600;
     border: 1px solid var(--border);
-    background: var(--panel);
-    color: var(--text2);
+    background: var(--surface);
+    color: var(--text-muted);
     cursor: pointer;
     transition: all .2s;
 }
@@ -2599,7 +2601,7 @@ svg {
     margin: 0 auto 14px;
     border-radius: 16px;
     color: var(--text);
-    background: var(--panel);
+    background: var(--surface);
     border: 1px solid var(--border);
     display: grid;
     place-items: center;
@@ -2619,7 +2621,7 @@ svg {
 
 .exCard p {
     font-size: 12.5px;
-    color: var(--text2);
+    color: var(--text-muted);
     line-height: 1.9;
     margin-bottom: 16px
 }
@@ -2638,7 +2640,7 @@ svg {
     transform: translateX(-50%) translateY(14px);
     z-index: 120;
     background: var(--text);
-    color: #fff;
+    color: var(--text);
     padding: 9px 16px;
     border-radius: 99px;
     font-size: 12px;
@@ -2735,7 +2737,7 @@ svg {
 
     .mflow h2 {
         font-size: 11px;
-        color: var(--text3);
+        color: var(--text-subtle);
         font-weight: 700;
         margin: 4px 2px 8px
     }

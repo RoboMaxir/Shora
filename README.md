@@ -1,184 +1,141 @@
-# SIMORGH — شورای مدیریت هوشمند
+# SIMORGH Platform Backend
 
-یک سیستم تصمیم‌گیری ساختاریافته و مبتنی بر شواهد برای سازمان‌ها.
+FastAPI-based backend for the SIMORGH decision council platform.
 
-## 📋 معرفی
+## Quick Start
 
-**SIMORGH** (شورای مدیریت هوشمند) یک پلتفرم تحلیل و تصمیم‌گیری است که با استفاده از هوش مصنوعی، فرآیندهای تصمیم‌گیری سازمانی را بهبود می‌بخشد. این سیستم بر اساس اصول معماری مستندشده در [Architecture.md](./Architecture.md) طراحی شده است.
+### 1. Install dependencies
 
-### ✨ ویژگی‌های کلیدی
-
-- **تصمیم‌گیری مبتنی بر شواهد**: تمرکز بر مدارک و داده‌های مستند به جای نظرات شخصی
-- **تحلیل چندبعدی**: بررسی مسائل از زوایای مختلف با استفاده از قابلیت‌های تحلیلی متنوع
-- **شفافیت کامل**: ثبت تمام فرضیات، منابع اطلاعاتی و استدلال‌ها
-- **جریان کار تعیین‌گرا**: فرآیندهای قابل تکرار و قابل اعتماد
-- **مستندات نسخه‌بندی‌شده**: نگهداری سوابق تصمیمات به صورت ساختاریافته
-
-## 🏗️ معماری سیستم
-
-برای درک عمیق معماری و اصول طراحی، به فایل [Architecture.md](./Architecture.md) مراجعه کنید. خلاصه اصول کلیدی:
-
-### اصول بنیادی
-
-1. **چارچوب‌بندی تصمیم**: چه چیزی باید تصمیم‌گیری شود؟
-2. **توسعه شواهد**: چه اطلاعاتی موجود، مفروض، مورد اختلاف یا گمشده است؟
-3. **ارزیابی گزینه‌ها**: چگونه альтернативها در برابر اهداف و محدودیت‌ها عمل می‌کنند؟
-4. **حکمرانی تصمیم**: چه کسی مجاز به تصمیم‌گیری است و تحت چه شرایطی؟
-
-### اجزای اصلی
-
-```
-کاربر → چارچوب‌بندی تصمیم → جمع‌آوری شواهد → تحلیل‌های انتخاب‌شده 
-      → بررسی ادعاها و تضادها → ارزیابی گزینه‌ها → ترکیب و اعتبارسنجی گزارش
-```
-
-## 📁 ساختار پروژه
-
-```
-/workspace
-├── Architecture.md          # مستندات کامل معماری و اصول طراحی
-├── README.md                # این فایل - راهنمای پروژه
-└── FrontEnd/                # رابط کاربری فرانت‌اند
-    ├── index.html           # صفحه اصلی برنامه
-    ├── style.css            # استایل‌ها و طراحی بصری
-    ├── src.js               # منطق و تعاملات جاوااسکریپت
-    ├── chart.umd.min.js     # کتابخانه نمودار (Chart.js)
-    └── gsap.min.js          # کتابخانه انیمیشن (GSAP)
-```
-
-## 🎨 رابط کاربری
-
-رابط کاربری SIMORGH با تمرکز بر تجربه کاربری فارسی‌زبانان طراحی شده است:
-
-### امکانات رابط کاربری
-
-- **ناوبری کناری**: دسترسی سریع به بخش‌های مختلف
-  - جلسه جدید
-  - جلسات اخیر
-  - فایل‌ها
-  - تصمیم‌های ثبت‌شده
-  - تاریخچه
-  - تنظیمات
-
-- **صفحه اصلی شورا**: نمایش اعضای شورا و فرآیند تصمیم‌گیری
-- **نمایش وضعیت**: پیگیری لحظه‌ای وضعیت پردازش
-- **صورت جلسه**: ثبت و خروجی تصمیمات
-
-### تکنولوژی‌های فرانت‌اند
-
-- **HTML5** با پشتیبانی کامل از RTL (راست‌چین)
-- **CSS3** با طراحی مدرن و واکنش‌گرا
-- **Vanilla JavaScript** برای عملکرد بهینه
-- **Chart.js** برای مصورسازی داده‌ها
-- **GSAP** برای انیمیشن‌های روان
-
-## 🚀 شروع به کار
-
-### پیش‌نیازها
-
-- مرورگر وب مدرن (Chrome, Firefox, Edge, Safari)
-- سرور وب ساده برای سرو فایل‌های استاتیک
-
-### اجرا
-
-1. کلون کردن مخزن:
 ```bash
-git clone <repository-url>
-cd <project-directory>
+pip install -r requirements.txt
 ```
 
-2. اجرای سرور محلی (اختیاری):
+### 2. Set up environment variables
+
 ```bash
-# با استفاده از Python
-python -m http.server 8000
-
-# یا با استفاده از Node.js
-npx serve FrontEnd
+cp .env.example .env
+# Edit .env with your database credentials
 ```
 
-3. باز کردن `FrontEnd/index.html` در مرورگر
+### 3. Start PostgreSQL
 
-## 📖 مستندات
+Ensure PostgreSQL is running and the database exists:
 
-- **[Architecture.md](./Architecture.md)**: مستندات کامل معماری شامل:
-  - خلاصه اجرایی معماری
-  - اصول اولیه محصول
-  - alternatif‌های معماری
-  - توصیه‌های پیاده‌سازی
-  - مدل داده و جریان کار
-  - ملاحظات عملیاتی
+```bash
+createdb simorgh_db
+# Or use psql to create the database and user
+```
 
-## 🔍 تمایزات کلیدی
+### 4. Run migrations
 
-### چه چیزی SIMORGH نیست
+```bash
+cd /workspace/Backend
+alembic upgrade head
+```
 
-- ❌ یک سیستم مبتنی بر "عامل خدا" (GOD Agent)
-- ❌ مجموعه‌ای از پرسوناهای هوش مصنوعی بدون ساختار
-- ❌ یک بازارچه عامل خودمختار
-- ❌ سیستم تصمیم‌گیرنده خودمختار
+### 5. Start the server
 
-### چه چیزی SIMORGH است
+```bash
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
 
-- ✅ یک سیستم تصمیم‌گیری منضبط که از هوش مصنوعی استفاده می‌کند
-- ✅ یک پلتفرم مستندسازی و ردیابی تصمیمات
-- ✅ ابزاری برای تقویت قضاوت انسانی
-- ✅ سیستمی با شفافیت کامل و قابلیت حسابرسی
+The API will be available at `http://localhost:8000`
 
-## 💡 اصول طراحی
+### 6. Interactive API docs
 
-### اصل کیفیت مرکزی
+Visit `http://localhost:8000/docs` for Swagger UI interactive documentation.
 
-**تعداد بیشتر عوامل هوش مصنوعی لزوماً به تصمیمات بهتر منجر نمی‌شود.**
+## Project Structure
 
-تماس‌های متعدد به یک مدل، با پرامپت‌های مشابه و شواهد یکسان، ممکن است اشتباهات همبسته و اجماع کاذب ایجاد کند.
+```
+Backend/
+├── app/
+│   ├── api/           # FastAPI routers
+│   │   ├── decisions.py
+│   │   └── runs.py
+│   ├── core/          # Configuration and utilities
+│   │   └── config.py
+│   ├── db/            # Database connection
+│   │   └── database.py
+│   ├── models/        # SQLAlchemy models
+│   │   └── models.py
+│   ├── schemas/       # Pydantic schemas
+│   │   └── schemas.py
+│   └── main.py        # Application entry point
+├── migrations/        # Alembic migrations
+│   ├── versions/
+│   ├── alembic.ini
+│   └── env.py
+├── requirements.txt
+└── .env.example
+```
 
-### فرضیات مهم برای به چالش کشیدن
+## Core API Endpoints
 
-1. **"عنوان شغلی تخصص ایجاد می‌کند"** - خیر، تعریف روش تحلیلی و شواهد مناسب ضروری است
-2. **"اجماع به معنای اطمینان است"** - خیر، توافق ممکن است ناشی از فرضیات مشترک پشتیبانی‌نشده باشد
-3. **"هر سوالی به یک شورا نیاز دارد"** - خیر، برخی درخواست‌ها به تحلیل ساده‌تر نیاز دارند
-4. **"گزارش متقاعدکننده محصول است"** - خیر، محصول واقعی یک فرآیند تصمیم‌گیری قابل تکثیر و بازرسی است
+### Decisions
 
-## 🛠️ توسعه
+- `POST /api/decisions` - Create a new decision
+- `GET /api/decisions/{id}` - Get decision details
+- `PUT /api/decisions/{id}` - Update a decision
+- `POST /api/decisions/{id}/run` - Start a new run (workflow execution)
+- `POST /api/decisions/{id}/human-decision` - Record human decision
 
-### جهت‌گیری‌های آینده
+### Runs
 
-سیستم به گونه‌ای طراحی شده که امکان تغییرات زیر بدون بازنویسی اساسی وجود دارد:
+- `GET /api/runs/{id}` - Get run details with tasks
+- `PUT /api/runs/{id}` - Update run status
+- `GET /api/runs/{id}/tasks` - Get all tasks for a run
+- `POST /api/runs/{id}/tasks` - Create a new task
+- `PUT /api/runs/{id}/tasks/{task_id}` - Update task status
 
-- ارائه‌دهندگان و خانواده‌های مدل
-- پیاده‌سازی پرامپت‌ها
-- ارائه‌دهندگان بازیابی اطلاعات
-- موجودی قابلیت‌ها
-- موتور صف و جریان کار
-- توپولوژی استقرار
+## Data Model
 
-### مواردی که باید قبل از پیاده‌سازی قفل شوند
+### Core Entities
 
-1. معناشناسی تصمیم، بازبینی، اجرا، وظیفه و گزارش
-2. مرزهای مستأجر و مجوز
-3. مدل اصالت شواهد و مجوز منبع
-4. قرارداد عامل/وظیفه و استراتژی نسخه‌بندی
-5. تمایز اختیار انسان در مقابل سیستم
-6. معناشناسی توصیه و امتناع
-7. مالکیت و اجرای بودجه
-8. محدودیت‌های نگهداری، حریم خصوصی و ارائه‌دهنده
-9. انواع تصمیمات پشتیبانی‌شده اولیه
-10. معیارهای ارزیابی و انتشار
+- **Tenant**: Organization boundary for multi-tenancy
+- **User**: User belonging to a tenant
+- **Decision**: Central artifact containing business question/context
+- **DecisionRevision**: Versioned snapshot of decision state
+- **Run**: Single execution of the SHORA workflow
+- **Task**: Bounded execution unit within a run
+- **TaskAttempt**: Records each LLM call attempt
+- **Evidence**: Retrieved information from knowledge sources
+- **Source**: External data source configuration
+- **Finding**: Analytical finding from capability execution
+- **Conflict**: Detected disagreement between analyses
+- **AuditEvent**: Security-relevant action log
 
-## 📝 لایسنس
+## Workflow States
 
-[مشخصات لایسنس را اضافه کنید]
+### Decision Status
 
-## 🤝 مشارکت
+```
+DRAFT → FRAMING → AWAITING_INPUT → PLANNING → EVIDENCE → 
+ANALYZING → REVIEWING → REVISING → SYNTHESIZING → VALIDATING → COMPLETED
+```
 
-[راهنمای مشارکت را اضافه کنید]
+Terminal states: `COMPLETED`, `COMPLETED_WITH_GAPS`, `FAILED`, `CANCELLED`
 
-## 📞 تماس و پشتیبانی
+### Human Decision
 
-[اطلاعات تماس را اضافه کنید]
+- `APPROVED` - Human accepts AI recommendation
+- `REJECTED` - Human rejects AI recommendation
+- `DEFERRED` - Human defers decision
+- `REQUESTED_REVISION` - Human requests revision
 
----
+## Next Steps
 
-**نکته پایانی**: SIMORGH را به عنوان یک سیستم تصمیم‌گیری منضبط که از هوش مصنوعی استفاده می‌کند بسازید—نه به عنوان یک جامعه هوش مصنوعی که تصادفاً یک گزارش تولید می‌کند.
+After Phase 1 is complete, continue with:
 
-ارزش قابل دفاع آن از چارچوب‌بندی قابل اعتماد، شواهد مرتبط، تحلیل قابل تکثیر، مخالفت‌های آشکار و تصمیمات انسانی مسئول ناشی خواهد شد. تعداد عوامل هوش مصنوعی یک جزئیات پیاده‌سازی است.
+1. **Phase 2**: Implement workflow engine and task scheduler
+2. **Phase 3**: Add analytical capabilities
+3. **Phase 4**: Implement structured debate/cross-review
+4. **Phase 5**: Add KNOWLEDGE interface
+5. **Phase 6**: Implement BOLUT adapter
+
+## Development Notes
+
+- All database queries must include tenant_id for isolation
+- LLM calls should eventually go through a gateway abstraction
+- Cost control limits are enforced at the Run level
+- Audit events should be logged for security-relevant actions

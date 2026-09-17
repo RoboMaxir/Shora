@@ -13,14 +13,7 @@ from sqlalchemy.orm import Session
 from app.models import models
 from app.workflow.state_machine import DecisionStatus, RunStatus, TaskStatus
 from app.workflow.history import record_event, WorkflowEventType
-from app.services.council_engine import (
-    AGENT_REGISTRY,
-    execute_agent,
-    gather_context,
-    detect_conflicts,
-    synthesize_analysis,
-    create_dossier,
-)
+from app.services.council_engine import CouncilEngine
 
 
 class WorkflowOrchestrator:
@@ -116,17 +109,12 @@ class WorkflowOrchestrator:
         # Task 1-3: Agent analyses (Strategy, Finance, Market)
         agent_order = ["strategy", "finance", "market"]
         for i, agent_name in enumerate(agent_order, start=1):
-            agent = AGENT_REGISTRY.get(agent_name)
-            if not agent:
-                continue
-            
             agent_task = models.Task(
                 run_id=run.id,
                 task_type=f"agent_analysis_{agent_name}",
                 capability=agent_name,
                 input_data={
                     "agent": agent_name,
-                    "role": agent.role,
                     "depends_on": [context_task.id],
                 },
                 order=i,

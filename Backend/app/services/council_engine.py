@@ -16,7 +16,7 @@ from sqlalchemy.orm import Session
 import logging
 
 from app.models import models
-from app.platform import platform_client
+from app.platform import platform
 
 
 logger = logging.getLogger(__name__)
@@ -27,7 +27,7 @@ class CouncilEngine:
     
     def __init__(self, db: Session):
         self.db = db
-        self.platform = platform_client.get_platform_client()
+        self.platform = platform
     
     async def execute_run(self, run_id: int) -> bool:
         """Execute the complete council workflow for a run"""
